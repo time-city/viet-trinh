@@ -16,38 +16,6 @@
 </head>
 <body>
 
-  <!-- ==================== HEADER & NAVIGATION ==================== -->
-  <header class="header-nav" id="topNav">
-    <div class="container nav-container">
-      <a href="#" class="brand-logo" data-placeholder="[LOGO / TÊN MC]">
-        <div class="logo-icon">VT</div>
-        <div class="brand-text">
-          <span class="brand-title">MC VIỆT TRINH</span>
-          <span class="brand-sub">EVENT & BILINGUAL HOST</span>
-        </div>
-      </a>
-
-      <nav>
-        <ul class="nav-links">
-          <li><a href="#about">Về Tôi</a></li>
-          <li><a href="#stats">Thông Số</a></li>
-          <li><a href="#styles">Phong Cách</a></li>
-          <li><a href="#events">Sự Kiện</a></li>
-          <li><a href="#videos">Showreel</a></li>
-          <li><a href="#gallery">Hình Ảnh</a></li>
-          <li><a href="#contact">Liên Hệ</a></li>
-        </ul>
-      </nav>
-
-      <div class="nav-actions">
-        <a href="#bookingModal" class="btn-booking trigger-booking-modal" id="headerBookingBtn">
-          Booking Ngay
-        </a>
-        <button class="mobile-toggle" aria-label="Toggle Navigation">☰</button>
-      </div>
-    </div>
-  </header>
-
   <main class="main-wrapper">
 
     <!-- ==================== SECTION 1: HERO SECTION ==================== -->
@@ -105,7 +73,7 @@
       <div class="container intro-stats-grid">
         
         <!-- Left Column: Inspiring Quote & Mission -->
-        <div class="intro-quote-box">
+        <div class="intro-quote-box reveal-on-scroll">
           <span class="quote-icon-large font-serif">“</span>
           <p class="quote-text" data-placeholder="[ĐOẠN VĂN: Lời ngỏ & Triết lý nghề nghiệp MC]">
             Với hơn 8 năm gắn bó với ánh đèn sân khấu và hàng trăm sự kiện quy mô từ hàng trăm đến hàng chục nghìn khán giả, tôi tin rằng người dẫn chương trình không chỉ đơn thuần là truyền tải kịch bản, mà là chiếc cầu nối cảm xúc chân thật, chạm tới trái tim của mọi người tham dự.
@@ -114,7 +82,7 @@
         </div>
 
         <!-- Right Column: Body Measurements & Profile Card -->
-        <div class="body-stats-card" id="stats" data-placeholder="[CARD: Chỉ số hình thể & Profile cá nhân]">
+        <div class="body-stats-card reveal-on-scroll" id="stats" data-placeholder="[CARD: Chỉ số hình thể & Profile cá nhân]">
           <div class="stats-card-header">
             <h3 class="stats-card-title">Chỉ Số & Ngoại Hình</h3>
             <p class="stats-card-sub">Phong thái thanh lịch & Chuẩn mực sân khấu</p>
@@ -164,7 +132,7 @@
     <section class="section-styles" id="styles">
       <div class="container">
         
-        <div class="styles-carousel-card">
+        <div class="styles-carousel-card reveal-on-scroll">
           <div class="styles-header-text">
             <span class="gold-badge-label">LĨNH VỰC HOẠT ĐỘNG</span>
             <h3 data-placeholder="[TIÊU ĐỀ: Phong cách dẫn]">Phong Cách Dẫn Dắt Đa Dạng - Biến Hóa Linh Hoạt</h3>
@@ -265,17 +233,17 @@
           <div class="stats-numbers-grid">
             
             <div class="stat-box" data-placeholder="[CON SỐ 1: Số năm kinh nghiệm]">
-              <div class="stat-num">8+</div>
+              <div class="stat-num" data-counter="8" data-suffix="+">0+</div>
               <div class="stat-desc">Năm Kinh Nghiệm</div>
             </div>
 
             <div class="stat-box" data-placeholder="[CON SỐ 2: Số sự kiện đã dẫn]">
-              <div class="stat-num">800+</div>
+              <div class="stat-num" data-counter="800" data-suffix="+">0+</div>
               <div class="stat-desc">Sự Kiện Lớn Nhỏ</div>
             </div>
 
             <div class="stat-box" data-placeholder="[CON SỐ 3: Đối tác thương hiệu]">
-              <div class="stat-num">15+</div>
+              <div class="stat-num" data-counter="15" data-suffix="+">0+</div>
               <div class="stat-desc">Đối Tác Tập Đoàn Lớn</div>
             </div>
 
@@ -338,7 +306,7 @@
           <h2 class="section-title">Những Sân Khấu Bùng Nổ Cảm Xúc</h2>
         </div>
 
-        <div class="event-showcase-card" data-placeholder="[CARD: Chi tiết sự kiện tiêu biểu]">
+        <div class="event-showcase-card reveal-on-scroll" data-placeholder="[CARD: Chi tiết sự kiện tiêu biểu]">
           <div class="event-content-grid">
             
             <!-- Event Left Info -->
@@ -479,7 +447,7 @@
         </div>
 
         <!-- Secondary TVC / Phóng Sự Feature -->
-        <div class="secondary-video-card" data-placeholder="[CARD: TVC hoặc Phóng sự chân dung MC]">
+        <div class="secondary-video-card reveal-on-scroll" data-placeholder="[CARD: TVC hoặc Phóng sự chân dung MC]">
           <div class="sec-video-player" data-placeholder="[VIDEO: Video phóng sự chân dung]">
             <img src="assets/images/hero_mc_white_dress.jpg" alt="Phóng sự MC Việt Trinh">
             <div class="play-btn-circle" style="width: 56px; height: 56px; font-size: 1.3rem;">▶</div>
@@ -505,7 +473,7 @@
           <h2 class="section-title">Khoảnh Khắc Sân Khấu & Hậu Trường</h2>
         </div>
 
-        <div class="gallery-masonry-grid" data-placeholder="[LƯỚI ẢNH: 8-10 ảnh hoạt động & hậu trường]">
+        <div class="gallery-masonry-grid reveal-on-scroll" data-placeholder="[LƯỚI ẢNH: 8-10 ảnh hoạt động & hậu trường]">
           
           <!-- Cell 1 -->
           <div class="gallery-cell span-2-col" data-placeholder="[ẢNH GALLERY 1: Sân khấu lớn]" data-zoom="assets/images/featured_event_stage.jpg">
@@ -570,7 +538,7 @@
     <section class="section-cta" id="contact">
       <div class="container">
         
-        <div class="cta-luxury-card" data-placeholder="[CARD: Call To Action & Booking]">
+        <div class="cta-luxury-card reveal-on-scroll" data-placeholder="[CARD: Call To Action & Booking]">
           <span class="cta-badge">KẾT NỐI & HỢP TÁC</span>
           <h2 class="cta-title" data-placeholder="[TIÊU ĐỀ CTA]">
             MC Việt Trinh – Sẵn Sàng Cùng Bạn<br class="cta-br">Kiến Tạo Câu Chuyện Thành Công
@@ -660,7 +628,7 @@
       <button class="modal-close-btn" id="modalCloseBtn" aria-label="Đóng">&times;</button>
       <div style="text-align: center;">
         <span class="gold-badge-label">BOOKING SỰ KIỆN</span>
-        <h3 style="font-family: var(--font-serif); color: var(--text-ruby); font-size: 1.6rem;">Đặt Lịch Cùng MC Việt Trinh</h3>
+        <h3 style="font-family: var(--font-serif); color: var(--text-dark); font-size: 1.6rem;">Đặt Lịch Cùng MC Việt Trinh</h3>
         <p style="font-size: 0.88rem; color: #666; margin-top: 4px;">Vui lòng điền thông tin, quản lý MC sẽ phản hồi ngay sau ít phút.</p>
       </div>
 
@@ -704,6 +672,13 @@
   </div>
 
 
+
+  <!-- ==================== SCROLL TO TOP BUTTON ==================== -->
+  <button class="scroll-to-top-btn" id="scrollToTopBtn" aria-label="Cuộn lên đầu trang" title="Cuộn lên đầu trang">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
 
   <!-- Script -->
   <script src="assets/js/main.js"></script>

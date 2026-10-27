@@ -1,28 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Header scroll effect
-  const headerNav = document.querySelector('.header-nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      headerNav.classList.add('scrolled');
-    } else {
-      headerNav.classList.remove('scrolled');
-    }
-  });
+  // 0. Ensure Header is removed from DOM (if cached)
+  document.querySelectorAll('header, .header-nav, #topNav').forEach(el => el.remove());
 
-  // 2. Mobile Nav Toggle
-  const mobileToggle = document.querySelector('.mobile-toggle');
-  const navLinks = document.querySelector('.nav-links');
-  if (mobileToggle && navLinks) {
-    mobileToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      mobileToggle.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+  // 1. Scroll To Top Button
+  const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+  if (scrollToTopBtn) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollToTopBtn.classList.add('visible');
+      } else {
+        scrollToTopBtn.classList.remove('visible');
+      }
     });
 
-    // Close menu when clicking any nav item
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        mobileToggle.textContent = '☰';
+    scrollToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
       });
     });
   }
@@ -156,6 +150,103 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+  }
+
+  // 8. Dynamic Number Counter Animation (Nhảy số ấn tượng)
+  const easeOutExpo = (x) => {
+    return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
+  };
+
+  const animateCounter = (el) => {
+    const target = parseInt(el.dataset.counter, 10);
+    const suffix = el.dataset.suffix || '';
+    if (isNaN(target)) return;
+
+    if (el._rafId) {
+      cancelAnimationFrame(el._rafId);
+      el._rafId = null;
+    }
+
+    const duration = target > 100 ? 1900 : (target > 20 ? 1400 : 1200);
+    const startTime = performance.now();
+
+    const updateCount = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = easeOutExpo(progress);
+      const current = Math.floor(eased * target);
+
+      el.textContent = current + suffix;
+
+      if (progress < 1) {
+        el._rafId = requestAnimationFrame(updateCount);
+      } else {
+        el.textContent = target + suffix;
+        el.classList.add('count-done');
+        setTimeout(() => el.classList.remove('count-done'), 700);
+      }
+    };
+
+    el._rafId = requestAnimationFrame(updateCount);
+  };
+
+  const resetCounter = (el) => {
+    if (el._rafId) {
+      cancelAnimationFrame(el._rafId);
+      el._rafId = null;
+    }
+    const suffix = el.dataset.suffix || '';
+    el.textContent = '0' + suffix;
+    el.classList.remove('count-done');
+  };
+
+  // 9. Milestone Stats Animation In & Out with Number Jump
+  const statsSection = document.querySelector('.section-stats-milestones');
+  if (statsSection) {
+    const statBoxes = statsSection.querySelectorAll('.stat-box');
+    const portrait = statsSection.querySelector('.stats-mc-portrait');
+    const counters = statsSection.querySelectorAll('[data-counter]');
+
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Animation IN
+          if (portrait) portrait.classList.add('in-view');
+          statBoxes.forEach(box => box.classList.add('in-view'));
+          counters.forEach(counter => animateCounter(counter));
+        } else {
+          // Animation OUT: Cho phép lặp lại khi cuộn lại
+          if (portrait) portrait.classList.remove('in-view');
+          statBoxes.forEach(box => box.classList.remove('in-view'));
+          counters.forEach(counter => resetCounter(counter));
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    statsObserver.observe(statsSection);
+  }
+
+  // 10. General Scroll Reveal (Animation In & Out cho các khối nội dung)
+  const revealElements = document.querySelectorAll('.reveal-on-scroll');
+  if (revealElements.length > 0) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        } else {
+          // Animation OUT khi ra khỏi màn hình
+          entry.target.classList.remove('in-view');
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -30px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
   }
 
 });
