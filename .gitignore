@@ -1,0 +1,13 @@
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Raw heavy camera files (kept locally, web uses optimized WebP)
+assets/sections/**/*.HEIC
+assets/sections/**/*.heic
+assets/sections/**/*.jpeg
+assets/sections/**/*.JPEG
+assets/sections/**/*.JPG
+assets/sections/**/*.jpg

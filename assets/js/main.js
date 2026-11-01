@@ -21,6 +21,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // 2. Hero Interactive Subtle Parallax on Desktop
+  const heroShowcase = document.querySelector('.hero-cutout-showcase');
+  const heroCutoutImg = document.querySelector('.hero-cutout-img');
+  const heroBackdrop = document.querySelector('.hero-cutout-backdrop');
+
+  if (heroShowcase && heroCutoutImg && window.matchMedia('(pointer: fine)').matches) {
+    let ticking = false;
+    let targetX = 0;
+    let targetY = 0;
+
+    heroShowcase.addEventListener('mousemove', (e) => {
+      const rect = heroShowcase.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      targetX = x * 18;
+      targetY = y * 18;
+
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          // Chỉ dịch ngang — giữ chân ảnh luôn dính đáy hero
+          heroCutoutImg.style.transform = `translate3d(${targetX}px, 0, 0) scale(1.015)`;
+          if (heroBackdrop) {
+            heroBackdrop.style.transform = `translate(calc(-50% + ${-targetX * 0.8}px), calc(-50% + ${-targetY * 0.8}px)) scale(1.06)`;
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    heroShowcase.addEventListener('mouseleave', () => {
+      heroCutoutImg.style.transform = '';
+      if (heroBackdrop) {
+        heroBackdrop.style.transform = '';
+      }
+    });
+  }
+
   // 3. Hosting Styles Carousel Controls
   const trackWrapper = document.querySelector('.styles-track-wrapper');
   const prevBtn = document.querySelector('.carousel-btn.prev-btn');
@@ -247,6 +285,105 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     revealElements.forEach(el => revealObserver.observe(el));
+  }
+
+  // 11. Typewriter Running Text Animation (Hiệu ứng gõ chữ cho lời ngỏ MC)
+  const quoteBox = document.querySelector('.intro-quote-box');
+  const quoteText = document.querySelector('.quote-text');
+  const quoteSign = document.querySelector('.quote-author-sign');
+
+  if (quoteBox && quoteText) {
+    const fullText = quoteText.textContent.trim().replace(/\s+/g, ' ');
+    quoteText.dataset.fullText = fullText;
+    let isTyping = false;
+    let isDone = false;
+
+    // Con trỏ nhấp nháy ánh vàng
+    const cursor = document.createElement('span');
+    cursor.className = 'typewriter-cursor';
+    cursor.setAttribute('aria-hidden', 'true');
+
+    const startTyping = () => {
+      if (isTyping || isDone) return;
+
+      // Hỗ trợ chế độ giảm chuyển động
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        quoteText.textContent = fullText;
+        if (quoteSign) quoteSign.classList.add('sign-visible');
+        isDone = true;
+        return;
+      }
+
+      isTyping = true;
+      quoteText.textContent = '';
+      quoteText.appendChild(cursor);
+      if (quoteSign) quoteSign.classList.remove('sign-visible');
+
+      let charIndex = 0;
+      const speed = 20; // 20ms mỗi ký tự: mượt mà, sống động, dễ đọc
+
+      const typeNext = () => {
+        if (charIndex < fullText.length) {
+          const nextChar = fullText.charAt(charIndex);
+          cursor.insertAdjacentText('beforebegin', nextChar);
+          charIndex++;
+          setTimeout(typeNext, speed);
+        } else {
+          isTyping = false;
+          isDone = true;
+          setTimeout(() => {
+            cursor.classList.add('cursor-fade');
+            if (quoteSign) quoteSign.classList.add('sign-visible');
+          }, 350);
+        }
+      };
+
+      typeNext();
+    };
+
+    const quoteObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !isDone) {
+          startTyping();
+        }
+      });
+    }, {
+      threshold: 0.3
+    });
+
+    quoteObserver.observe(quoteBox);
+  }
+
+  // 12. Gallery Category Filtering (Lọc lưới ảnh theo chủ đề: BĐS, Gala, Hội thảo, Mẹ & Bé, YEP...)
+  const galleryTabs = document.querySelectorAll('.gallery-tab-btn');
+  const galleryCells = document.querySelectorAll('.gallery-masonry-grid .gallery-cell');
+
+  if (galleryTabs.length > 0 && galleryCells.length > 0) {
+    galleryTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const category = tab.dataset.category;
+
+        // Active tab button state
+        galleryTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        // Filter grid items with staggered animation
+        let visibleIndex = 0;
+        galleryCells.forEach(cell => {
+          const cellCat = cell.dataset.category;
+          if (category === 'all' || cellCat === category) {
+            cell.classList.remove('is-hidden');
+            cell.style.animation = 'none';
+            // Trigger reflow for animation restart
+            void cell.offsetWidth;
+            cell.style.animation = `galleryFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) ${Math.min(visibleIndex * 0.03, 0.3)}s both`;
+            visibleIndex++;
+          } else {
+            cell.classList.add('is-hidden');
+          }
+        });
+      });
+    });
   }
 
 });

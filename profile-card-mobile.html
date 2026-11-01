@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Profile Card - MC Việt Trinh (Tailwind CSS)</title>
+  
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: {
+              DEFAULT: '#8e1526', // Đỏ đô chủ đạo
+              dark: '#680c1a',
+              light: '#ab1f34',
+            },
+            cream: {
+              light: '#fdfaf4',
+              DEFAULT: '#fbf5eb', // Nền be sáng
+              border: '#ebdcc8',
+            },
+            bronze: '#6e594d',
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-cream min-h-screen font-sans text-[#221711] flex flex-col items-center justify-center p-4 sm:p-6 antialiased selection:bg-maroon selection:text-white">
+
+  <!-- Tiêu đề demo trang xem trước -->
+  <div class="text-center mb-6 max-w-sm">
+    <span class="inline-block text-[11px] font-bold tracking-[2.5px] uppercase text-maroon bg-white/80 px-3 py-1 rounded-full border border-cream-border shadow-sm mb-2">
+      Mobile UI Component
+    </span>
+    <h1 class="text-xl font-bold text-gray-900 font-serif">Profile Card Module</h1>
+    <p class="text-xs text-bronze mt-1">Thiết kế tối giản • Hiện đại • Tối ưu 100% cho màn hình Mobile</p>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- BẮT ĐẦU: MODULE PROFILE CARD TAILWIND CSS CHO MOBILE                     -->
+  <!-- ========================================================================= -->
+  <div class="w-full max-w-[360px] mx-auto select-none">
+    
+    <!-- 1. KHUNG ẢNH CHÂN DUNG TỶ LỆ 4:3 (HOẶC 1:1) -->
+    <div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-b from-[#f2e6d6] to-[#e4d2bf] border border-cream-border/60">
+      <img 
+        src="assets/sections/ava/image-Photoroom-cropped.png" 
+        alt="MC Việt Trinh" 
+        class="w-full h-full object-contain object-bottom drop-shadow-md transition-transform duration-500 hover:scale-105"
+        loading="eager"
+      />
+      <!-- Gradient che phủ cực nhẹ góc dưới ảnh để chuyển tiếp mượt mà vào thẻ overlap -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none"></div>
+    </div>
+
+    <!-- 2. THẺ THÔNG SỐ XẾP CHỒNG (OVERLAP 20% LÊN CẠNH DƯỚI ẢNH) -->
+    <div class="relative -mt-10 mx-3 bg-white/95 backdrop-blur-md rounded-2xl border border-cream-border/80 shadow-[0_8px_24px_rgba(110,57,17,0.06)] p-3.5 z-10">
+      
+      <!-- LƯỚI 3 CỘT NẰM NGANG, KẺ DỌC MỎNG NHẸ -->
+      <div class="grid grid-cols-3 divide-x divide-cream-border/80">
+        
+        <!-- Cột 1 -->
+        <div class="flex flex-col items-center justify-center px-1 text-center">
+          <span class="font-serif text-2xl sm:text-[26px] font-bold text-maroon leading-none tracking-tight">
+            8+
+          </span>
+          <span class="text-[9.5px] sm:text-[10px] font-bold text-bronze uppercase tracking-wider mt-1.5 leading-tight">
+            NĂM KINH NGHIỆM
+          </span>
+        </div>
+
+        <!-- Cột 2 -->
+        <div class="flex flex-col items-center justify-center px-1 text-center">
+          <span class="font-serif text-2xl sm:text-[26px] font-bold text-maroon leading-none tracking-tight">
+            800+
+          </span>
+          <span class="text-[9.5px] sm:text-[10px] font-bold text-bronze uppercase tracking-wider mt-1.5 leading-tight">
+            SỰ KIỆN LỚN NHỎ
+          </span>
+        </div>
+
+        <!-- Cột 3 -->
+        <div class="flex flex-col items-center justify-center px-1 text-center">
+          <span class="font-serif text-2xl sm:text-[26px] font-bold text-maroon leading-none tracking-tight">
+            15+
+          </span>
+          <span class="text-[9.5px] sm:text-[10px] font-bold text-bronze uppercase tracking-wider mt-1.5 leading-tight">
+            ĐỐI TÁC TẬP ĐOÀN
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <!-- ========================================================================= -->
+  <!-- KẾT THÚC: MODULE PROFILE CARD                                             -->
+  <!-- ========================================================================= -->
+
+  <!-- Khối mã nguồn nhanh (Quick Code Viewer) -->
+  <div class="mt-8 w-full max-w-[360px] bg-white rounded-xl border border-cream-border p-4 shadow-sm text-left">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-xs font-bold text-gray-700">Mã nguồn Tailwind CSS</span>
+      <button 
+        id="copyBtn"
+        onclick="copyCode()"
+        class="text-[11px] font-semibold text-maroon hover:text-maroon-dark bg-maroon/5 hover:bg-maroon/10 px-2.5 py-1 rounded transition-colors"
+      >
+        Sao chép Code
+      </button>
+    </div>
+    <p class="text-[11px] text-gray-500 leading-relaxed">
+      Module đã được tối ưu để chỉ chiếm ~260px chiều cao màn hình, không làm người dùng phải cuộn trang.
+    </p>
+  </div>
+
+  <script>
+    function copyCode() {
+      const code = `<!-- Profile Card Module (Tailwind CSS v3) -->
+<div class="w-full max-w-[360px] mx-auto select-none">
+  <!-- Ảnh 4:3 -->
+  <div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-b from-[#f2e6d6] to-[#e4d2bf] border border-[#ebdcc8]/60">
+    <img src="assets/sections/ava/image-Photoroom-cropped.png" alt="MC Việt Trinh" class="w-full h-full object-contain object-bottom" />
+    <div class="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none"></div>
+  </div>
+
+  <!-- Thẻ Overlap đè 20% cạnh dưới ảnh -->
+  <div class="relative -mt-10 mx-3 bg-white/95 backdrop-blur-md rounded-2xl border border-[#ebdcc8]/80 shadow-[0_8px_24px_rgba(110,57,17,0.06)] p-3.5 z-10">
+    <div class="grid grid-cols-3 divide-x divide-[#ebdcc8]/80">
+      <div class="flex flex-col items-center justify-center px-1 text-center">
+        <span class="font-serif text-2xl font-bold text-[#8e1526] leading-none">8+</span>
+        <span class="text-[9.5px] font-bold text-[#6e594d] uppercase tracking-wider mt-1.5 leading-tight">NĂM KINH NGHIỆM</span>
+      </div>
+      <div class="flex flex-col items-center justify-center px-1 text-center">
+        <span class="font-serif text-2xl font-bold text-[#8e1526] leading-none">800+</span>
+        <span class="text-[9.5px] font-bold text-[#6e594d] uppercase tracking-wider mt-1.5 leading-tight">SỰ KIỆN LỚN NHỎ</span>
+      </div>
+      <div class="flex flex-col items-center justify-center px-1 text-center">
+        <span class="font-serif text-2xl font-bold text-[#8e1526] leading-none">15+</span>
+        <span class="text-[9.5px] font-bold text-[#6e594d] uppercase tracking-wider mt-1.5 leading-tight">ĐỐI TÁC TẬP ĐOÀN</span>
+      </div>
+    </div>
+  </div>
+</div>`;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Đã sao chép ✓';
+        btn.classList.add('text-green-600', 'bg-green-50');
+        setTimeout(() => {
+          btn.textContent = 'Sao chép Code';
+          btn.classList.remove('text-green-600', 'bg-green-50');
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
