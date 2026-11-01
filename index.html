@@ -16,10 +16,34 @@
     rel="stylesheet">
 
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="assets/css/style.css?v=2.8">
+  <link rel="stylesheet" href="assets/css/style.css?v=3.0">
 </head>
 
 <body>
+
+  <!-- ==================== GRAND STAGE CURTAIN (TẤM MÀN KÉO SÂN KHẤU KHI VÀO WEB) ==================== -->
+  <div class="stage-curtain-overlay" id="stageCurtain" aria-label="Màn kéo sân khấu khai màn" role="dialog">
+    <!-- Cánh rèm trái -->
+    <div class="curtain-panel curtain-left">
+      <div class="curtain-folds"></div>
+      <div class="curtain-fringe"></div>
+    </div>
+    <!-- Cánh rèm phải -->
+    <div class="curtain-panel curtain-right">
+      <div class="curtain-folds"></div>
+      <div class="curtain-fringe"></div>
+    </div>
+    <!-- Huy hiệu trung tâm sân khấu -->
+    <div class="curtain-emblem" id="curtainEmblem">
+      <div class="emblem-crest">
+        <span class="emblem-tag">OFFICIAL PROFILE</span>
+        <h2 class="emblem-name font-script">MC Việt Trinh</h2>
+        <p class="emblem-role">PROFESSIONAL EVENT HOST</p>
+        <div class="emblem-divider-gold"></div>
+        <span class="emblem-action-hint">Chạm hoặc đợi để mở màn sân khấu</span>
+      </div>
+    </div>
+  </div>
 
   <main class="main-wrapper">
 
@@ -98,10 +122,10 @@
               <span class="h-sp-dot h-sp-dot-5"></span>
             </div>
             <picture>
-              <source srcset="assets/sections/ava/image-Photoroom-cropped.webp" type="image/webp">
-              <img src="assets/sections/ava/image-Photoroom-cropped.png"
+              <source srcset="assets/sections/ava/image-Photoroom (7).webp" type="image/webp">
+              <img src="assets/sections/ava/image-Photoroom (7).png"
                 alt="MC Việt Trinh - Chân dung phong thái sân khấu" class="hero-cutout-img"
-                data-zoom="assets/sections/ava/image-Photoroom-cropped.png">
+                data-zoom="assets/sections/ava/image-Photoroom (7).png">
             </picture>
           </div>
         </div>
@@ -209,18 +233,38 @@
 
         <div class="stats-milestones-row">
 
-          <!-- MC Portrait with Mic on Red Dress -->
+          <!-- MC Portrait Cutout Showcase (image-Photoroom (8).png) -->
           <div class="stats-mc-portrait" data-placeholder="[ẢNH 3: MC Việt Trinh Chân Dung]">
-            <div class="stats-mc-img" data-zoom="assets/sections/ava/body-stats-red-cutout.png">
+            <div class="stats-mc-img" data-zoom="assets/sections/ava/image-Photoroom (8).png">
+              <!-- Hiệu ứng quét tia sáng vàng hoàng gia (Royal Gold Light Shimmer Sweep) -->
+              <div class="stats-shimmer-sweep" aria-hidden="true"></div>
+              
+              <!-- Bụi sao lấp lánh sân khấu (Stage Sparkles Aura) -->
+              <div class="stats-sparkles-wrap" aria-hidden="true">
+                <svg class="c-sp-star c-sp-1" viewBox="0 0 24 24"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>
+                <svg class="c-sp-star c-sp-2" viewBox="0 0 24 24"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>
+                <svg class="c-sp-star c-sp-3" viewBox="0 0 24 24"><path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/></svg>
+                <span class="c-sp-dot c-dot-1"></span>
+                <span class="c-sp-dot c-dot-2"></span>
+              </div>
+
+              <!-- Tag vinh danh sân khấu -->
+              <div class="stats-portrait-badge">
+                <span class="badge-dot"></span>
+                <span>PROFESSIONAL HOST</span>
+              </div>
+
               <picture>
-                <source srcset="assets/sections/ava/body-stats-red-cutout.webp" type="image/webp">
-                <img src="assets/sections/ava/body-stats-red-cutout.png" alt="MC Việt Trinh trong đầm dạ hội đỏ sang trọng" loading="lazy" width="566" height="1136">
+                <source srcset="assets/sections/ava/image-Photoroom (8).webp" type="image/webp">
+                <img src="assets/sections/ava/image-Photoroom (8).png" alt="MC Việt Trinh - Phong thái đài các và duyên dáng" loading="lazy" width="774" height="1238">
               </picture>
             </div>
           </div>
 
           <!-- 3 Highlight Stat Cards / Overlap Card on Mobile -->
           <div class="stats-numbers-grid">
+            <!-- Hiệu ứng viền phát sáng -->
+            <div class="stats-grid-glow-border" aria-hidden="true"></div>
 
             <div class="stat-box" data-placeholder="[CON SỐ 1: Số năm kinh nghiệm]">
               <div class="stat-num" data-counter="8" data-suffix="+">8+</div>
@@ -579,6 +623,33 @@
               </div>
             </div>
 
+            <!-- Video dẫn thực tế xen kẽ tự động play khi cuộn tới -->
+            <div class="mosaic-inline-video-box">
+              <div class="video-reel-tag">
+                <span class="live-rec-dot"></span>
+                <span>CLIP DẪN THỰC TẾ SÂN KHẤU</span>
+              </div>
+              <div class="video-reel-wrapper">
+                <video class="scroll-autoplay-video" playsinline muted loop preload="metadata" poster="assets/sections/video/poster_ky_niem_chs.webp">
+                  <source src="assets/sections/video/chao_ky_niem_5_nam_chs.mp4" type="video/mp4">
+                  Trình duyệt không hỗ trợ phát video.
+                </video>
+                <button type="button" class="video-sound-btn" aria-label="Bật/Tắt âm thanh">
+                  <svg class="sound-icon-muted" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                  </svg>
+                  <svg class="sound-icon-unmuted" style="display:none;" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  </svg>
+                  <span class="sound-btn-text">Bật tiếng</span>
+                </button>
+              </div>
+              <p class="video-reel-caption">Khoảnh khắc mở màn Lễ Kỷ Niệm 5 Năm Thành Lập Doanh Nghiệp CHS</p>
+            </div>
+
             <!-- Dòng caption cảm xúc cô đọng dưới đáy card -->
             <p class="mosaic-caption">
               "Trang trọng, ấm cúng và đầy tự hào – Nơi cảm xúc thăng hoa cùng từng cột mốc phát triển rực rỡ."
@@ -645,6 +716,33 @@
               </div>
             </div>
 
+            <!-- Video dẫn thực tế xen kẽ tự động play khi cuộn tới -->
+            <div class="mosaic-inline-video-box">
+              <div class="video-reel-tag">
+                <span class="live-rec-dot"></span>
+                <span>CLIP DẪN THỰC TẾ SÂN KHẤU</span>
+              </div>
+              <div class="video-reel-wrapper">
+                <video class="scroll-autoplay-video" playsinline muted loop preload="metadata" poster="assets/sections/video/poster_gioi_thieu_dai_bieu.webp">
+                  <source src="assets/sections/video/gioi_thieu_dai_bieu.mp4" type="video/mp4">
+                  Trình duyệt không hỗ trợ phát video.
+                </video>
+                <button type="button" class="video-sound-btn" aria-label="Bật/Tắt âm thanh">
+                  <svg class="sound-icon-muted" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                  </svg>
+                  <svg class="sound-icon-unmuted" style="display:none;" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  </svg>
+                  <span class="sound-btn-text">Bật tiếng</span>
+                </button>
+              </div>
+              <p class="video-reel-caption">Nghi thức giới thiệu đại biểu & quý quan khách trang trọng, chuẩn mực ngoại giao</p>
+            </div>
+
             <!-- Dòng caption cảm xúc cô đọng dưới đáy card -->
             <p class="mosaic-caption">
               "Gửi trọn lòng tri ân sâu sắc, gắn kết bền chặt niềm tin và tình bằng hữu cùng quý đối tác."
@@ -697,6 +795,33 @@
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- Video dẫn thực tế xen kẽ tự động play khi cuộn tới -->
+            <div class="mosaic-inline-video-box">
+              <div class="video-reel-tag">
+                <span class="live-rec-dot"></span>
+                <span>CLIP DẪN THỰC TẾ SÂN KHẤU</span>
+              </div>
+              <div class="video-reel-wrapper">
+                <video class="scroll-autoplay-video" playsinline muted loop preload="metadata" poster="assets/sections/video/poster_dai_hoi_htx.webp">
+                  <source src="assets/sections/video/dai_hoi_htx_may_tre.mp4" type="video/mp4">
+                  Trình duyệt không hỗ trợ phát video.
+                </video>
+                <button type="button" class="video-sound-btn" aria-label="Bật/Tắt âm thanh">
+                  <svg class="sound-icon-muted" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                  </svg>
+                  <svg class="sound-icon-unmuted" style="display:none;" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  </svg>
+                  <span class="sound-btn-text">Bật tiếng</span>
+                </button>
+              </div>
+              <p class="video-reel-caption">Phong thái dẫn dắt đĩnh đạc, chuẩn xác tại phiên trọng thể Đại Hội HTX Mây Tre</p>
             </div>
 
             <!-- Dòng caption cảm xúc cô đọng dưới đáy card -->
@@ -771,6 +896,33 @@
                 <img src="assets/sections/hoi_thao_me_va_be/DSC_4142.webp" alt="Khung cảnh gắn kết gia đình và cộng đồng mẹ và bé" loading="lazy">
                 <div class="thumb-overlay"></div>
               </div>
+            </div>
+
+            <!-- Video dẫn thực tế xen kẽ tự động play khi cuộn tới -->
+            <div class="mosaic-inline-video-box">
+              <div class="video-reel-tag">
+                <span class="live-rec-dot"></span>
+                <span>CLIP DẪN THỰC TẾ SÂN KHẤU</span>
+              </div>
+              <div class="video-reel-wrapper">
+                <video class="scroll-autoplay-video" playsinline muted loop preload="metadata" poster="assets/sections/video/poster_hoi_thao.webp">
+                  <source src="assets/sections/video/hoi_thao.mp4" type="video/mp4">
+                  Trình duyệt không hỗ trợ phát video.
+                </video>
+                <button type="button" class="video-sound-btn" aria-label="Bật/Tắt âm thanh">
+                  <svg class="sound-icon-muted" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                  </svg>
+                  <svg class="sound-icon-unmuted" style="display:none;" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  </svg>
+                  <span class="sound-btn-text">Bật tiếng</span>
+                </button>
+              </div>
+              <p class="video-reel-caption">Khả năng làm chủ sân khấu, điều phối hội thảo chuyên đề tương tác cao và sinh động</p>
             </div>
 
             <!-- Dòng caption cảm xúc cô đọng dưới đáy card -->
@@ -935,6 +1087,33 @@
               </div>
             </div>
 
+            <!-- Video dẫn thực tế xen kẽ tự động play khi cuộn tới -->
+            <div class="mosaic-inline-video-box">
+              <div class="video-reel-tag">
+                <span class="live-rec-dot"></span>
+                <span>CLIP DẪN THỰC TẾ SÂN KHẤU</span>
+              </div>
+              <div class="video-reel-wrapper">
+                <video class="scroll-autoplay-video" playsinline muted loop preload="metadata" poster="assets/sections/video/poster_chao_yep.webp">
+                  <source src="assets/sections/video/chao_yep.mp4" type="video/mp4">
+                  Trình duyệt không hỗ trợ phát video.
+                </video>
+                <button type="button" class="video-sound-btn" aria-label="Bật/Tắt âm thanh">
+                  <svg class="sound-icon-muted" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                  </svg>
+                  <svg class="sound-icon-unmuted" style="display:none;" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  </svg>
+                  <span class="sound-btn-text">Bật tiếng</span>
+                </button>
+              </div>
+              <p class="video-reel-caption">Khoảnh khắc khai mạc bùng nổ năng lượng tại đêm đại tiệc Year End Party</p>
+            </div>
+
             <!-- Dòng caption cảm xúc cô đọng dưới đáy card -->
             <p class="mosaic-caption">
               "Khoảnh khắc nhìn lại một chặng đường đã qua và cùng nhau bùng nổ năng lượng, hướng tới năm mới thắng lợi."
@@ -946,7 +1125,216 @@
       </div>
     </section>
 
-    <!-- ==================== SECTION 9: CALL TO ACTION BANNER ==================== -->
+    <!-- ==================== SECTION 6.5: CLIENT FEEDBACK & SOCIAL PROOF ==================== -->
+    <section class="section-feedback" id="feedback">
+      <div class="container">
+
+        <div style="text-align: center; margin-bottom: 38px;">
+          <span class="gold-badge-label">MINH CHỨNG TÍN NHIỆM & SỰ HÀI LÒNG</span>
+          <h2 class="section-title">Đối Tác & Khách Hàng Nói Gì Về MC Việt Trinh?</h2>
+          <p style="color: #665042; font-size: 0.95rem; margin-top: 6px; font-style: italic; max-width: 680px; margin-left: auto; margin-right: auto;">
+            "Sự hài lòng và niềm tin yêu của quý đối tác, quý khách hàng chính là bảo chứng vững chắc nhất cho chất lượng và cái tâm với nghề của MC Việt Trinh."
+          </p>
+        </div>
+
+        <!-- Feedback Grid 9 Card Thực Tế -->
+        <div class="feedback-grid reveal-on-scroll">
+
+          <!-- Card 1: Doji NVT -->
+          <article class="feedback-card" data-zoom="assets/sections/feedBack/IMG_3817.webp">
+            <div class="feedback-card-header">
+              <div class="feedback-stars">⭐⭐⭐⭐⭐</div>
+              <span class="feedback-partner-badge">Tập Đoàn Vàng Bạc DOJI</span>
+            </div>
+            <div class="feedback-img-wrap">
+              <picture>
+                <source srcset="assets/sections/feedBack/IMG_3817.webp" type="image/webp">
+                <img src="assets/sections/feedBack/IMG_3817.PNG" alt="Feedback từ đại diện Tập đoàn DOJI dành cho MC Việt Trinh" loading="lazy">
+              </picture>
+              <div class="feedback-zoom-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                <span>Xem ảnh lớn</span>
+              </div>
+            </div>
+            <div class="feedback-card-footer">
+              <p class="feedback-quote">"Sếp em đánh giá chị dẫn hay và sôi động, tạo không khí gần gũi với khách hàng..."</p>
+            </div>
+          </article>
+
+          <!-- Card 2: IEC Group - Vietnam Insurance Summit -->
+          <article class="feedback-card" data-zoom="assets/sections/feedBack/IMG_4217.webp">
+            <div class="feedback-card-header">
+              <div class="feedback-stars">⭐⭐⭐⭐⭐</div>
+              <span class="feedback-partner-badge">Tập Đoàn IEC - Hội Nghị Cấp Cao</span>
+            </div>
+            <div class="feedback-img-wrap">
+              <picture>
+                <source srcset="assets/sections/feedBack/IMG_4217.webp" type="image/webp">
+                <img src="assets/sections/feedBack/IMG_4217.PNG" alt="Feedback Vietnam Insurance Summit dành cho MC Việt Trinh" loading="lazy">
+              </picture>
+              <div class="feedback-zoom-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                <span>Xem ảnh lớn</span>
+              </div>
+            </div>
+            <div class="feedback-card-footer">
+              <p class="feedback-quote">"Các anh chị ban tổ chức đều ưng ý lắm ạ, chị yên tâm nha..."</p>
+            </div>
+          </article>
+
+          <!-- Card 3: Nguyễn Thịnh Đà Nẵng -->
+          <article class="feedback-card" data-zoom="assets/sections/feedBack/IMG_3698.webp">
+            <div class="feedback-card-header">
+              <div class="feedback-stars">⭐⭐⭐⭐⭐</div>
+              <span class="feedback-partner-badge">Sự Kiện Nguyễn Thịnh Đà Nẵng</span>
+            </div>
+            <div class="feedback-img-wrap">
+              <picture>
+                <source srcset="assets/sections/feedBack/IMG_3698.webp" type="image/webp">
+                <img src="assets/sections/feedBack/IMG_3698.PNG" alt="Feedback khách hàng Nguyễn Thịnh Đà Nẵng" loading="lazy">
+              </picture>
+              <div class="feedback-zoom-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                <span>Xem ảnh lớn</span>
+              </div>
+            </div>
+            <div class="feedback-card-footer">
+              <p class="feedback-quote">"Bữa tiệc mọi thứ đúng như mong đợi, cả hai vợ chồng đều rất vui vẻ chị nè..."</p>
+            </div>
+          </article>
+
+          <!-- Card 4: Tour Gala Sự Kiện Doanh Nghiệp -->
+          <article class="feedback-card" data-zoom="assets/sections/feedBack/IMG_4220.webp">
+            <div class="feedback-card-header">
+              <div class="feedback-stars">⭐⭐⭐⭐⭐</div>
+              <span class="feedback-partner-badge">Đoàn Dạ Tiệc Doanh Nghiệp</span>
+            </div>
+            <div class="feedback-img-wrap">
+              <picture>
+                <source srcset="assets/sections/feedBack/IMG_4220.webp" type="image/webp">
+                <img src="assets/sections/feedBack/IMG_4220.jpg" alt="Feedback chương trình dạ tiệc doanh nghiệp" loading="lazy">
+              </picture>
+              <div class="feedback-zoom-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                <span>Xem ảnh lớn</span>
+              </div>
+            </div>
+            <div class="feedback-card-footer">
+              <p class="feedback-quote">"Chương trình ok lắm em, Sếp chị khen nhiều, đặc biệt là MC..."</p>
+            </div>
+          </article>
+
+          <!-- Card 5: IMG_4218 -->
+          <article class="feedback-card" data-zoom="assets/sections/feedBack/IMG_4218.webp">
+            <div class="feedback-card-header">
+              <div class="feedback-stars">⭐⭐⭐⭐⭐</div>
+              <span class="feedback-partner-badge">Đối Tác Tổ Chức Sự Kiện</span>
+            </div>
+            <div class="feedback-img-wrap">
+              <picture>
+                <source srcset="assets/sections/feedBack/IMG_4218.webp" type="image/webp">
+                <img src="assets/sections/feedBack/IMG_4218.PNG" alt="Feedback đối tác dành cho MC Việt Trinh" loading="lazy">
+              </picture>
+              <div class="feedback-zoom-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                <span>Xem ảnh lớn</span>
+              </div>
+            </div>
+            <div class="feedback-card-footer">
+              <p class="feedback-quote">"Cảm ơn MC đã đồng hành tạo nên sự kiện thành công trọn vẹn..."</p>
+            </div>
+          </article>
+
+          <!-- Card 6: IMG_4219 -->
+          <article class="feedback-card" data-zoom="assets/sections/feedBack/IMG_4219.webp">
+            <div class="feedback-card-header">
+              <div class="feedback-stars">⭐⭐⭐⭐⭐</div>
+              <span class="feedback-partner-badge">Ban Tổ Chức Hội Thảo</span>
+            </div>
+            <div class="feedback-img-wrap">
+              <picture>
+                <source srcset="assets/sections/feedBack/IMG_4219.webp" type="image/webp">
+                <img src="assets/sections/feedBack/IMG_4219.PNG" alt="Đánh giá từ ban tổ chức hội thảo" loading="lazy">
+              </picture>
+              <div class="feedback-zoom-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                <span>Xem ảnh lớn</span>
+              </div>
+            </div>
+            <div class="feedback-card-footer">
+              <p class="feedback-quote">"Khách mời và lãnh đạo rất khen phong thái dẫn dắt chuyên nghiệp..."</p>
+            </div>
+          </article>
+
+          <!-- Card 7: IMG_4221 -->
+          <article class="feedback-card" data-zoom="assets/sections/feedBack/IMG_4221.webp">
+            <div class="feedback-card-header">
+              <div class="feedback-stars">⭐⭐⭐⭐⭐</div>
+              <span class="feedback-partner-badge">Khách Hàng Doanh Nghiệp</span>
+            </div>
+            <div class="feedback-img-wrap">
+              <picture>
+                <source srcset="assets/sections/feedBack/IMG_4221.webp" type="image/webp">
+                <img src="assets/sections/feedBack/IMG_4221.jpg" alt="Phản hồi khách hàng doanh nghiệp" loading="lazy">
+              </picture>
+              <div class="feedback-zoom-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                <span>Xem ảnh lớn</span>
+              </div>
+            </div>
+            <div class="feedback-card-footer">
+              <p class="feedback-quote">"Sự nhiệt tình và năng lượng của MC giúp chương trình bùng nổ..."</p>
+            </div>
+          </article>
+
+          <!-- Card 8: IMG_4222 -->
+          <article class="feedback-card" data-zoom="assets/sections/feedBack/IMG_4222.webp">
+            <div class="feedback-card-header">
+              <div class="feedback-stars">⭐⭐⭐⭐⭐</div>
+              <span class="feedback-partner-badge">Khách Hàng Sự Kiện VIP</span>
+            </div>
+            <div class="feedback-img-wrap">
+              <picture>
+                <source srcset="assets/sections/feedBack/IMG_4222.webp" type="image/webp">
+                <img src="assets/sections/feedBack/IMG_4222.jpg" alt="Phản hồi từ sự kiện VIP" loading="lazy">
+              </picture>
+              <div class="feedback-zoom-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                <span>Xem ảnh lớn</span>
+              </div>
+            </div>
+            <div class="feedback-card-footer">
+              <p class="feedback-quote">"Hẹn gặp lại MC Việt Trinh trong tất cả các sự kiện tiếp theo của công ty..."</p>
+            </div>
+          </article>
+
+          <!-- Card 9: IMG_4223 -->
+          <article class="feedback-card" data-zoom="assets/sections/feedBack/IMG_4223.webp">
+            <div class="feedback-card-header">
+              <div class="feedback-stars">⭐⭐⭐⭐⭐</div>
+              <span class="feedback-partner-badge">Đơn Vị Booking & Agency</span>
+            </div>
+            <div class="feedback-img-wrap">
+              <picture>
+                <source srcset="assets/sections/feedBack/IMG_4223.webp" type="image/webp">
+                <img src="assets/sections/feedBack/IMG_4223.PNG" alt="Agency đánh giá MC Việt Trinh" loading="lazy">
+              </picture>
+              <div class="feedback-zoom-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                <span>Xem ảnh lớn</span>
+              </div>
+            </div>
+            <div class="feedback-card-footer">
+              <p class="feedback-quote">"Làm việc với chị luôn an tâm tuyệt đối về chất lượng và tiến độ..."</p>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 7: CALL TO ACTION BANNER ==================== -->
     <section class="section-cta" id="contact">
       <div class="container">
 

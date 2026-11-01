@@ -1,17 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 0. Ensure Header is removed from DOM (if cached)
+  // 0. Grand Stage Curtain Reveal (Tấm màn kéo sân khấu khai màn khi vào web)
+  const stageCurtain = document.getElementById('stageCurtain');
+  if (stageCurtain) {
+    document.body.classList.add('curtain-locked');
+
+    let curtainOpened = false;
+    const openCurtain = () => {
+      if (curtainOpened) return;
+      curtainOpened = true;
+
+      stageCurtain.classList.add('curtain-open');
+      document.body.classList.remove('curtain-locked');
+
+      // Sau khi rèm mở hoàn tất (1.6s), ẩn hoàn toàn
+      setTimeout(() => {
+        stageCurtain.classList.add('curtain-hidden');
+      }, 1650);
+    };
+
+    // Tự động mở sau 850ms để người xem chiêm ngưỡng màn khai mạc
+    const autoOpenTimer = setTimeout(openCurtain, 850);
+
+    // Người dùng chạm hoặc click bất cứ đâu -> Mở màn ngay lập tức
+    stageCurtain.addEventListener('click', () => {
+      clearTimeout(autoOpenTimer);
+      openCurtain();
+    });
+  }
+
+  // 0.1 Ensure Header is removed from DOM (if cached)
   document.querySelectorAll('header, .header-nav, #topNav').forEach(el => el.remove());
 
-  // 1. Scroll To Top Button
+  // 1. Scroll To Top Button (Tối ưu rAF chống giật lag khi cuộn)
   const scrollToTopBtn = document.getElementById('scrollToTopBtn');
   if (scrollToTopBtn) {
+    let scrollTicking = false;
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
-        scrollToTopBtn.classList.add('visible');
-      } else {
-        scrollToTopBtn.classList.remove('visible');
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          if (window.scrollY > 300) {
+            scrollToTopBtn.classList.add('visible');
+          } else {
+            scrollToTopBtn.classList.remove('visible');
+          }
+          scrollTicking = false;
+        });
+        scrollTicking = true;
       }
-    });
+    }, { passive: true });
 
     scrollToTopBtn.addEventListener('click', () => {
       window.scrollTo({
@@ -74,41 +110,147 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. Interactive Video Playlist Switcher
-  const playlistItems = document.querySelectorAll('.playlist-item');
-  const activeVideoTitle = document.querySelector('.active-video-title');
-  const activeVideoDuration = document.querySelector('.active-video-duration');
-  const mainVideoFrame = document.querySelector('#mainVideoPlayer');
-  const mainVideoPoster = document.querySelector('.video-custom-poster');
+  // 4. Scroll Autoplay Video Reels & Sound Controller (Lướt tới tự động Play & Tự bật tiếng)
+  const autoPlayVideos = document.querySelectorAll('.scroll-autoplay-video');
+  const videoWrappers = document.querySelectorAll('.video-reel-wrapper');
 
-  if (playlistItems.length > 0) {
-    playlistItems.forEach(item => {
-      item.addEventListener('click', () => {
-        playlistItems.forEach(el => el.classList.remove('active'));
-        item.classList.add('active');
+  if (autoPlayVideos.length > 0) {
+    // Cập nhật giao diện nút âm thanh
+    const updateSoundBtnUI = (video, isMuted) => {
+      const wrapper = video.closest('.video-reel-wrapper');
+      if (!wrapper) return;
+      const soundBtn = wrapper.querySelector('.video-sound-btn');
+      if (!soundBtn) return;
+      const iconMuted = soundBtn.querySelector('.sound-icon-muted');
+      const iconUnmuted = soundBtn.querySelector('.sound-icon-unmuted');
+      const btnText = soundBtn.querySelector('.sound-btn-text');
 
-        const title = item.dataset.title;
-        const duration = item.dataset.duration;
-        const videoSrc = item.dataset.video;
-        const posterSrc = item.dataset.poster;
+      if (isMuted) {
+        if (iconMuted) iconMuted.style.display = 'block';
+        if (iconUnmuted) iconUnmuted.style.display = 'none';
+        if (btnText) btnText.textContent = 'Bật tiếng';
+        soundBtn.classList.remove('is-playing-sound');
+      } else {
+        if (iconMuted) iconMuted.style.display = 'none';
+        if (iconUnmuted) iconUnmuted.style.display = 'block';
+        if (btnText) btnText.textContent = 'Tắt tiếng';
+        soundBtn.classList.add('is-playing-sound');
+      }
+    };
 
-        if (activeVideoTitle) activeVideoTitle.textContent = title;
-        if (activeVideoDuration) activeVideoDuration.textContent = duration;
-        
-        if (mainVideoPoster && posterSrc) {
-          mainVideoPoster.querySelector('img').src = posterSrc;
-          mainVideoPoster.style.display = 'block';
+    // Hàm phát video có tiếng (Tự động tắt các video khác để không bị lẫn tiếng)
+    const playVideoWithSound = (video) => {
+      // Tắt tiếng và tạm dừng các video khác
+      autoPlayVideos.forEach(other => {
+        if (other !== video) {
+          if (!other.paused) other.pause();
+          other.muted = true;
+          updateSoundBtnUI(other, true);
         }
       });
+
+      // Tự động bật tiếng và phát
+      video.muted = false;
+      video.volume = 1.0;
+
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          updateSoundBtnUI(video, false);
+        }).catch(() => {
+          // Nếu chính sách trình duyệt yêu cầu tương tác trước khi unmuted:
+          // Phát tạm muted và tự động bật tiếng ngay khi người dùng chạm hoặc lướt tiếp
+          video.muted = true;
+          video.play().catch(() => {});
+          updateSoundBtnUI(video, true);
+
+          // Nếu trình duyệt yêu cầu tương tác trước khi unmuted:
+          // Lưu cờ và tự động bật tiếng ngay khi người dùng chạm hoặc click màn hình
+          const autoUnmuteOnGesture = () => {
+            if (!video.paused && video.muted) {
+              video.muted = false;
+              video.volume = 1.0;
+              updateSoundBtnUI(video, false);
+            }
+            window.removeEventListener('click', autoUnmuteOnGesture);
+            window.removeEventListener('touchstart', autoUnmuteOnGesture);
+          };
+
+          window.addEventListener('click', autoUnmuteOnGesture, { once: true, passive: true });
+          window.addEventListener('touchstart', autoUnmuteOnGesture, { once: true, passive: true });
+        });
+      }
+    };
+
+    // Tự động phát khi cuộn vào tầm mắt, tạm dừng khi cuộn ra ngoài
+    let currentlyActiveVideo = null;
+    const videoObserverOptions = {
+      root: null,
+      rootMargin: '0px 0px -5% 0px',
+      threshold: 0.3
+    };
+
+    const videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const video = entry.target;
+        if (entry.isIntersecting) {
+          currentlyActiveVideo = video;
+          playVideoWithSound(video);
+        } else {
+          if (currentlyActiveVideo === video) {
+            currentlyActiveVideo = null;
+          }
+          if (!video.paused) {
+            video.pause();
+          }
+          video.muted = true;
+          updateSoundBtnUI(video, true);
+        }
+      });
+    }, videoObserverOptions);
+
+    autoPlayVideos.forEach(vid => {
+      videoObserver.observe(vid);
     });
 
-    if (mainVideoPoster) {
-      mainVideoPoster.addEventListener('click', () => {
-        mainVideoPoster.style.display = 'none';
-        // Play video simulation or YouTube embed trigger
-        alert('Phát video: Tính năng sẵn sàng kết nối video YouTube hoặc MP4 của MC.');
-      });
-    }
+    // Mở khóa âm thanh khi người dùng chạm màn hình lần đầu (100% không dùng scroll event để chống giật)
+    const unlockGlobalAudio = () => {
+      if (currentlyActiveVideo && currentlyActiveVideo.muted) {
+        currentlyActiveVideo.muted = false;
+        currentlyActiveVideo.volume = 1.0;
+        updateSoundBtnUI(currentlyActiveVideo, false);
+      }
+    };
+    window.addEventListener('touchstart', unlockGlobalAudio, { passive: true, once: true });
+    window.addEventListener('click', unlockGlobalAudio, { passive: true, once: true });
+
+    // Xử lý nút bấm thủ công bật/tắt âm thanh
+    videoWrappers.forEach(wrapper => {
+      const video = wrapper.querySelector('.scroll-autoplay-video');
+      const soundBtn = wrapper.querySelector('.video-sound-btn');
+
+      if (video && soundBtn) {
+        soundBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+
+          video.muted = !video.muted;
+          if (!video.muted) {
+            video.volume = 1.0;
+            if (video.paused) video.play().catch(() => {});
+          }
+          updateSoundBtnUI(video, video.muted);
+        });
+
+        // Click vào khung video để Play / Pause
+        wrapper.addEventListener('click', () => {
+          if (video.paused) {
+            playVideoWithSound(video);
+          } else {
+            video.pause();
+          }
+        });
+      }
+    });
   }
 
   // 5. Lightbox Modal for Gallery & Event Photos
@@ -282,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
     revealElements.forEach(el => revealObserver.observe(el));
   }
 
-  // 11. Typewriter Running Text Animation (Hiệu ứng gõ chữ cho lời ngỏ MC)
+  // 11. Typewriter Running Text Animation (Hiệu ứng gõ chữ thị giác mượt mà, không tiếng ồn)
   const quoteBox = document.querySelector('.intro-quote-box');
   const quoteText = document.querySelector('.quote-text');
   const quoteSign = document.querySelector('.quote-author-sign');
@@ -315,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (quoteSign) quoteSign.classList.remove('sign-visible');
 
       let charIndex = 0;
-      const speed = 20; // 20ms mỗi ký tự: mượt mà, sống động, dễ đọc
+      const speed = 22; // Tốc độ gõ chữ mượt mà, êm ái
 
       const typeNext = () => {
         if (charIndex < fullText.length) {
