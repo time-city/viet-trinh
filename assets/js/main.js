@@ -238,50 +238,45 @@ document.addEventListener('DOMContentLoaded', () => {
     el.classList.remove('count-done');
   };
 
-  // 9. Milestone Stats Animation In & Out with Number Jump
+  // 9. Milestone Stats Animation (Kích hoạt 1 lần mượt mà khi cuộn tới, chống giật 100%)
   const statsSection = document.querySelector('.section-stats-milestones');
   if (statsSection) {
     const statBoxes = statsSection.querySelectorAll('.stat-box');
     const portrait = statsSection.querySelector('.stats-mc-portrait');
     const counters = statsSection.querySelectorAll('[data-counter]');
+    let statsDone = false;
 
-    const statsObserver = new IntersectionObserver((entries) => {
+    const statsObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Animation IN
+        if (entry.isIntersecting && !statsDone) {
+          statsDone = true;
           if (portrait) portrait.classList.add('in-view');
           statBoxes.forEach(box => box.classList.add('in-view'));
           counters.forEach(counter => animateCounter(counter));
-        } else {
-          // Animation OUT: Cho phép lặp lại khi cuộn lại
-          if (portrait) portrait.classList.remove('in-view');
-          statBoxes.forEach(box => box.classList.remove('in-view'));
-          counters.forEach(counter => resetCounter(counter));
+          observer.unobserve(entry.target);
         }
       });
     }, {
-      threshold: 0.15,
-      rootMargin: '0px 0px -40px 0px'
+      threshold: 0.1,
+      rootMargin: '0px 0px 40px 0px'
     });
 
     statsObserver.observe(statsSection);
   }
 
-  // 10. General Scroll Reveal (Animation In & Out cho các khối nội dung)
+  // 10. General Scroll Reveal (Xuất hiện 1 lần ổn định, loại bỏ hoàn toàn giật nảy)
   const revealElements = document.querySelectorAll('.reveal-on-scroll');
   if (revealElements.length > 0) {
-    const revealObserver = new IntersectionObserver((entries) => {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
-        } else {
-          // Animation OUT khi ra khỏi màn hình
-          entry.target.classList.remove('in-view');
+          observer.unobserve(entry.target);
         }
       });
     }, {
-      threshold: 0.12,
-      rootMargin: '0px 0px -30px 0px'
+      threshold: 0.08,
+      rootMargin: '0px 0px 60px 0px'
     });
 
     revealElements.forEach(el => revealObserver.observe(el));
