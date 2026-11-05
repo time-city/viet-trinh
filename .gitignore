@@ -15,4 +15,5 @@ assets/sections/**/*.jpg
 # Heavy raw video files (>100MB)
 assets/sections/**/*.mov
 assets/sections/**/*.MOV
+assets/sections/video/1103.mp4
 
