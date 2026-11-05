@@ -3289,25 +3289,43 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   line-height: 1.25;
 }
 
-/* SECTION 9: CALL TO ACTION BANNER */
+/* SECTION 9: CALL TO ACTION BANNER (Tràn viền 2 bên sang trọng) */
 .section-cta {
-  padding: 80px 0 60px;
+  padding: 0;
   position: relative;
-  background: #f5ebe0;
+  background: transparent;
+}
+
+.section-cta .container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 .cta-luxury-card {
   background: linear-gradient(150deg, #640d1a 0%, #44060f 50%, #290207 100%);
-  border-radius: var(--radius-lg);
-  padding: 50px 38px;
+  border-radius: 0 !important;
+  padding: 56px 24px 50px;
   box-shadow: 0 25px 65px rgba(50, 5, 12, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
   text-align: center;
   color: #ffffff;
-  border: 1.5px solid rgba(220, 163, 101, 0.55);
+  border-top: 1.5px solid rgba(220, 163, 101, 0.55);
+  border-bottom: 1.5px solid rgba(220, 163, 101, 0.55);
+  border-left: none !important;
+  border-right: none !important;
   position: relative;
   overflow: hidden;
-  max-width: 880px;
-  margin: 0 auto;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.cta-luxury-card > * {
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .cta-luxury-card::before {
@@ -4315,12 +4333,14 @@ body.guide-mode-active [data-placeholder]::before {
   }
 
   .section-cta {
-    padding: 40px 0 24px;
+    padding: 0 !important;
   }
 
   .cta-luxury-card {
-    padding: 28px 16px 22px;
-    border-radius: var(--radius-md);
+    padding: 38px 16px 32px !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
   }
 
   .cta-title {
