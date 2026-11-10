@@ -2172,11 +2172,11 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   line-height: 1.25;
 }
 
-/* 2 Cột: Trái 42% (Ảnh dọc lớn) | Phải 58% (5 ảnh ghép) */
+/* 2 Cột: Trái 44% (Ảnh dọc lớn) | Phải 56% (5 ảnh ghép 3 hàng) */
 .mosaic-layout {
   display: grid;
-  grid-template-columns: 42fr 58fr;
-  gap: 10px;
+  grid-template-columns: 44fr 56fr;
+  gap: 12px;
   align-items: stretch;
   position: relative;
   z-index: 2;
@@ -2185,12 +2185,12 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 /* Mosaic Thumbnail Chung */
 .mosaic-thumb {
   position: relative;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
   background: #2b1f18;
-  border: 1px solid rgba(220, 163, 101, 0.2);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(220, 163, 101, 0.25);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
 /* Tia sáng quét lấp lánh (Glint) qua ảnh khi hover */
@@ -2263,20 +2263,20 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 .mosaic-col-feature .feature-thumb {
   width: 100%;
   height: 100%;
-  min-height: 420px;
+  min-height: 440px;
 }
 
 /* Cột Phải: Grid 3 hàng ghép chuẩn mosaic */
 .mosaic-col-grid {
   display: grid;
-  grid-template-rows: 1fr 1.12fr 1fr;
-  gap: 10px;
+  grid-template-rows: 1fr 1.15fr 1fr;
+  gap: 12px;
   height: 100%;
 }
 
 .mosaic-subrow {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .mosaic-subrow.row-2-cols {
@@ -2289,12 +2289,12 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 
 .mosaic-subrow.row-2-cols .mosaic-thumb {
   height: 100%;
-  min-height: 125px;
+  min-height: 130px;
 }
 
 .mosaic-subrow.row-1-col .mosaic-thumb.thumb-banner {
   height: 100%;
-  min-height: 145px;
+  min-height: 150px;
 }
 
 /* Biến thể Mosaic 4 ảnh (2 hàng bên phải) */
@@ -2399,6 +2399,34 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   line-height: 1.5;
 }
 
+/* Footer Slogan & Quote chuẩn Style reference image */
+.mosaic-footer-quote {
+  margin-top: 16px;
+  padding-top: 14px;
+  text-align: center;
+  border-top: 1px solid rgba(220, 163, 101, 0.18);
+}
+
+.mosaic-caption-slogan {
+  font-family: var(--font-heading, "Playfair Display", Georgia, serif);
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #dca365;
+  margin: 0 0 6px 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.mosaic-caption-sub {
+  margin: 0;
+  font-size: clamp(0.82rem, 1.1vw, 0.92rem);
+  line-height: 1.5;
+  color: #dfcebf;
+  font-style: italic;
+  opacity: 0.9;
+}
+
 /* Responsive Cho Giao Diện Tablet */
 @media (max-width: 900px) {
   .events-stacked-wrapper {
@@ -2472,6 +2500,20 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
     margin-top: 10px;
     padding-top: 8px;
     line-height: 1.5;
+  }
+
+  .mosaic-footer-quote {
+    margin-top: 12px;
+    padding-top: 10px;
+  }
+
+  .mosaic-caption-slogan {
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+  }
+
+  .mosaic-caption-sub {
+    font-size: 0.82rem;
   }
 
   .mosaic-col-grid.grid-2-rows .mosaic-subrow.row-2-cols .mosaic-thumb,
@@ -2654,6 +2696,20 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
     line-height: 1.4;
   }
 
+  .mosaic-footer-quote {
+    margin-top: 10px;
+    padding-top: 8px;
+  }
+
+  .mosaic-caption-slogan {
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+  }
+
+  .mosaic-caption-sub {
+    font-size: 0.76rem;
+  }
+
   .c-sp-star.c-sp-1 {
     width: 14px;
     height: 14px;
@@ -2767,6 +2823,20 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
     font-size: 0.68rem;
     margin-top: 6px;
     padding-top: 5px;
+  }
+
+  .mosaic-footer-quote {
+    margin-top: 8px;
+    padding-top: 6px;
+  }
+
+  .mosaic-caption-slogan {
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+  }
+
+  .mosaic-caption-sub {
+    font-size: 0.7rem;
   }
 }
 
