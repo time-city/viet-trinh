@@ -4973,6 +4973,80 @@ body.curtain-revealed #hero .hero-sparkles-wrap,
   overflow: hidden;
 }
 
+/* SECTION 6.5: FEEDBACK PHOTO GRID (Lưới ảnh 9 phản hồi thực tế, không băng chuyền) */
+.feedback-raw-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.feedback-raw-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(45, 5, 12, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+  border: 1.5px solid rgba(220, 163, 101, 0.45);
+  background: #ffffff;
+  cursor: zoom-in;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedback-raw-item:hover {
+  transform: translateY(-6px);
+  border-color: #cb833d;
+  box-shadow: 0 16px 36px rgba(60, 10, 18, 0.22), 0 0 16px rgba(220, 163, 101, 0.35);
+}
+
+.feedback-raw-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.feedback-raw-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(45, 5, 12, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  gap: 6px;
+  backdrop-filter: blur(2px);
+}
+
+.feedback-raw-item:hover .feedback-raw-overlay {
+  opacity: 1;
+}
+
+@media (max-width: 900px) {
+  .feedback-raw-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .feedback-raw-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 8px;
+  }
+}
+
 .feedback-carousel-wrapper {
   position: relative;
   width: 100%;
