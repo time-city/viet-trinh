@@ -1955,9 +1955,9 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   border: 1.5px solid rgba(220, 163, 101, 0.45);
   border-radius: 20px;
   box-shadow: 0 18px 48px rgba(45, 5, 12, 0.45), 0 0 24px rgba(220, 163, 101, 0.12);
-  padding: 28px 32px;
+  padding: 24px 28px;
   display: grid;
-  grid-template-columns: 58fr 42fr;
+  grid-template-columns: 70fr 30fr;
   gap: 28px;
   align-items: center;
   position: relative;
@@ -1967,7 +1967,7 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 
 /* Biến thể đảo chiều (Nội dung Trái | Video Phải) */
 .video-spotlight-card.is-reversed {
-  grid-template-columns: 42fr 58fr;
+  grid-template-columns: 30fr 70fr;
 }
 
 .video-spotlight-card.is-reversed .spotlight-video-col {
@@ -2002,74 +2002,58 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   display: block;
 }
 
-/* Nút Play Overlay trung tâm */
-.spotlight-play-overlay {
+/* Nút Bật/Tắt âm thanh thông minh nổi trên video */
+.spotlight-sound-toggle {
   position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
+  bottom: 12px;
+  right: 12px;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: rgba(18, 2, 5, 0.38);
-  transition: background 0.3s ease, opacity 0.35s ease;
-  cursor: pointer;
-  z-index: 5;
-}
-
-.spotlight-video-wrapper:hover .spotlight-play-overlay {
-  background: rgba(18, 2, 5, 0.2);
-}
-
-.spotlight-play-btn {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #f0ca85 0%, #dca365 50%, #9a531a 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #200206;
-  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.6), 0 0 24px rgba(220, 163, 101, 0.6);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
-}
-
-.spotlight-play-btn svg {
-  width: 28px;
-  height: 28px;
-  margin-left: 4px;
-  fill: currentColor;
-}
-
-.spotlight-video-wrapper:hover .spotlight-play-btn {
-  transform: scale(1.12);
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.7), 0 0 32px rgba(255, 220, 130, 0.8);
-}
-
-.spotlight-duration-pill {
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 30px;
+  background: rgba(15, 2, 5, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(220, 163, 101, 0.6);
   color: #fffaf0;
-  background: rgba(14, 1, 3, 0.88);
-  padding: 5px 14px;
-  border-radius: 20px;
-  border: 1px solid rgba(220, 163, 101, 0.45);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  font-size: 0.76rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  user-select: none;
 }
 
-.spotlight-video-wrapper.is-playing .spotlight-play-overlay {
-  opacity: 0;
-  pointer-events: none;
+.spotlight-sound-toggle:hover {
+  background: linear-gradient(135deg, #dca365 0%, #b8860b 100%);
+  color: #200206;
+  border-color: #ffd88a;
+  transform: scale(1.05);
 }
 
-/* Cột Thông tin & Nội dung */
+.spotlight-sound-toggle svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.spotlight-sound-toggle.is-unmuted .sound-icon-muted {
+  display: none;
+}
+
+.spotlight-sound-toggle:not(.is-unmuted) .sound-icon-unmuted {
+  display: none;
+}
+
+/* Cột Thông tin & Nội dung (Gọn gàng, tinh giản, tôn vinh video) */
 .spotlight-info-col {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   color: #fffaf2;
 }
 
@@ -2093,7 +2077,7 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 
 .spotlight-title {
   font-family: var(--font-heading, 'Playfair Display', serif);
-  font-size: clamp(1.35rem, 1.8vw, 1.7rem);
+  font-size: clamp(1.25rem, 1.6vw, 1.55rem);
   color: #fffaf0;
   line-height: 1.3;
   margin: 0;
@@ -2101,34 +2085,30 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 }
 
 .spotlight-desc {
-  font-size: 0.94rem;
+  font-size: 0.9rem;
   line-height: 1.6;
   color: #e4d3c4;
   margin: 0;
 }
 
-.spotlight-highlights {
+.spotlight-mini-pills {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 4px;
-  padding: 12px 16px;
-  background: rgba(30, 3, 8, 0.5);
-  border-radius: 10px;
-  border-left: 3px solid #dca365;
 }
 
-.spotlight-hl-item {
-  display: flex;
+.mini-pill {
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.86rem;
-  color: #f7e8d6;
-}
-
-.spotlight-hl-item strong {
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(220, 163, 101, 0.12);
+  border: 1px solid rgba(220, 163, 101, 0.35);
   color: #ffd88a;
-  min-width: 80px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 /* Responsive cho Tablet & Mobile */
@@ -2165,14 +2145,11 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
     font-size: 1.25rem;
   }
 
-  .spotlight-play-btn {
-    width: 52px;
-    height: 52px;
-  }
-
-  .spotlight-play-btn svg {
-    width: 22px;
-    height: 22px;
+  .spotlight-sound-toggle {
+    bottom: 10px;
+    right: 10px;
+    padding: 5px 12px;
+    font-size: 0.72rem;
   }
 }
 

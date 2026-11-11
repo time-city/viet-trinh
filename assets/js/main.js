@@ -609,46 +609,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
     wrappers.forEach(wrap => {
       const video = wrap.querySelector('video');
-      const overlay = wrap.querySelector('.spotlight-play-overlay');
+      const soundBtn = wrap.querySelector('.spotlight-sound-toggle');
       if (!video) return;
 
-      if (overlay) {
-        overlay.addEventListener('click', (e) => {
-          e.stopPropagation();
-          // Dừng các video khác đang phát trên trang
-          document.querySelectorAll('video').forEach(otherVideo => {
-            if (otherVideo !== video && !otherVideo.paused) {
-              otherVideo.pause();
-              otherVideo.closest('.spotlight-video-wrapper')?.classList.remove('is-playing');
-              otherVideo.closest('.mosaic-video-thumb')?.classList.remove('is-playing');
-            }
-          });
+      // Đảm bảo ban đầu tắt tiếng để trình duyệt luôn cho phép tự động phát mượt mà
+      video.muted = true;
 
-          video.play().then(() => {
-            wrap.classList.add('is-playing');
-          }).catch(err => console.warn('Spotlight video playback error:', err));
+      // Xử lý nút bật/tắt tiếng thông minh
+      if (soundBtn) {
+        soundBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          video.muted = !video.muted;
+          updateSoundBtn(soundBtn, video.muted);
+
+          // Nếu đang bật tiếng video này, tắt tiếng tất cả video khác để âm thanh không bị chồng chéo
+          if (!video.muted) {
+            document.querySelectorAll('.spotlight-video-wrapper video').forEach(otherVideo => {
+              if (otherVideo !== video) {
+                otherVideo.muted = true;
+                const otherBtn = otherVideo.closest('.spotlight-video-wrapper')?.querySelector('.spotlight-sound-toggle');
+                if (otherBtn) updateSoundBtn(otherBtn, true);
+              }
+            });
+          }
         });
       }
+
+      function updateSoundBtn(btn, isMuted) {
+        const label = btn.querySelector('.sound-label');
+        if (isMuted) {
+          btn.classList.remove('is-unmuted');
+          if (label) label.textContent = 'Bật tiếng';
+        } else {
+          btn.classList.add('is-unmuted');
+          if (label) label.textContent = 'Tắt tiếng';
+        }
+      }
+
+      // Đồng bộ trạng thái nếu người dùng chỉnh volume bằng thanh điều khiển trình duyệt
+      video.addEventListener('volumechange', () => {
+        if (soundBtn) {
+          updateSoundBtn(soundBtn, video.muted || video.volume === 0);
+        }
+      });
 
       video.addEventListener('play', () => wrap.classList.add('is-playing'));
       video.addEventListener('pause', () => wrap.classList.remove('is-playing'));
       video.addEventListener('ended', () => {
-        wrap.classList.remove('is-playing');
         video.currentTime = 0;
-        video.load();
+        video.play().catch(() => {});
       });
 
-      // Tự động tạm dừng khi cuộn ra ngoài màn hình
+      // IntersectionObserver: Tự động play khi cuộn vào tầm mắt, tạm dừng khi cuộn ra ngoài
       if ('IntersectionObserver' in window) {
         const obs = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
-            if (!entry.isIntersecting && !video.paused) {
-              video.pause();
-              wrap.classList.remove('is-playing');
+            if (entry.isIntersecting) {
+              const playPromise = video.play();
+              if (playPromise !== undefined) {
+                playPromise.then(() => {
+                  wrap.classList.add('is-playing');
+                }).catch(() => {
+                  // Dự phòng nếu trình duyệt đòi hỏi mute chặt chẽ
+                  video.muted = true;
+                  video.play().catch(() => {});
+                });
+              }
+            } else {
+              if (!video.paused) {
+                video.pause();
+                wrap.classList.remove('is-playing');
+              }
             }
           });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.25 });
+
         obs.observe(wrap);
+      } else {
+        video.play().catch(() => {});
       }
     });
   }
