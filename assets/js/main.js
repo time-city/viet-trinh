@@ -601,6 +601,61 @@ document.addEventListener('DOMContentLoaded', () => {
   initVideoPlaylist();
 
   // ==========================================================================
+  // 14.2. SPOTLIGHT VIDEOS (3 Section Video Tiêu Điểm Trước Sự Kiện Thực Tế)
+  // ==========================================================================
+  function initSpotlightVideos() {
+    const wrappers = document.querySelectorAll('.spotlight-video-wrapper');
+    if (!wrappers.length) return;
+
+    wrappers.forEach(wrap => {
+      const video = wrap.querySelector('video');
+      const overlay = wrap.querySelector('.spotlight-play-overlay');
+      if (!video) return;
+
+      if (overlay) {
+        overlay.addEventListener('click', (e) => {
+          e.stopPropagation();
+          // Dừng các video khác đang phát trên trang
+          document.querySelectorAll('video').forEach(otherVideo => {
+            if (otherVideo !== video && !otherVideo.paused) {
+              otherVideo.pause();
+              otherVideo.closest('.spotlight-video-wrapper')?.classList.remove('is-playing');
+              otherVideo.closest('.mosaic-video-thumb')?.classList.remove('is-playing');
+            }
+          });
+
+          video.play().then(() => {
+            wrap.classList.add('is-playing');
+          }).catch(err => console.warn('Spotlight video playback error:', err));
+        });
+      }
+
+      video.addEventListener('play', () => wrap.classList.add('is-playing'));
+      video.addEventListener('pause', () => wrap.classList.remove('is-playing'));
+      video.addEventListener('ended', () => {
+        wrap.classList.remove('is-playing');
+        video.currentTime = 0;
+        video.load();
+      });
+
+      // Tự động tạm dừng khi cuộn ra ngoài màn hình
+      if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting && !video.paused) {
+              video.pause();
+              wrap.classList.remove('is-playing');
+            }
+          });
+        }, { threshold: 0.1 });
+        obs.observe(wrap);
+      }
+    });
+  }
+
+  initSpotlightVideos();
+
+  // ==========================================================================
   // 15. FEEDBACK CAROUSEL (Tự động lướt mượt mà, vuốt chạm, kéo chuột, lightbox)
   // ==========================================================================
   function initFeedbackCarousel() {
