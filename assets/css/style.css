@@ -2172,14 +2172,46 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   line-height: 1.25;
 }
 
-/* 2 Cột: Trái 44% (Ảnh dọc lớn) | Phải 56% (5 ảnh ghép 3 hàng) */
+/* 2 Cột: Trái 38% (Ảnh MC tách nền tràn viền) | Phải 62% (5 ảnh ghép 3 hàng) */
 .mosaic-layout {
   display: grid;
-  grid-template-columns: 44fr 56fr;
+  grid-template-columns: 38fr 62fr;
   gap: 12px;
   align-items: stretch;
   position: relative;
   z-index: 2;
+  overflow: visible;
+}
+
+/* Layout đảo chiều xen kẽ: Grid ảnh Trái (62fr) | Model / Ảnh chính Phải (38fr) */
+.mosaic-layout.mosaic-reverse {
+  grid-template-columns: 62fr 38fr !important;
+}
+
+.mosaic-layout.mosaic-reverse .mosaic-col-grid {
+  order: 1 !important;
+}
+
+.mosaic-layout.mosaic-reverse .mosaic-col-feature {
+  order: 2 !important;
+  justify-content: flex-start !important;
+}
+
+/* Khi slot model tách nền nằm ở cột phải: tràn ngược nhẹ về grid bên trái */
+.mosaic-layout.mosaic-reverse .mosaic-col-feature .feature-cutout-slot {
+  align-items: flex-end !important;
+  justify-content: flex-start !important;
+}
+
+.mosaic-layout.mosaic-reverse .feature-cutout-slot img.feature-cutout-img {
+  left: 0 !important;
+  right: auto !important;
+  object-position: bottom left !important;
+  transform: translateX(calc(-1 * var(--mc-shift, 22px))) !important;
+}
+
+.mosaic-layout.mosaic-reverse .feature-cutout-slot:hover img.feature-cutout-img {
+  transform: translateX(calc(-1 * var(--mc-shift, 22px))) translateY(-4px) scale(1.02) !important;
 }
 
 /* Mosaic Thumbnail Chung */
@@ -2244,7 +2276,7 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 
 /* Các ảnh chân dung đứng (MC toàn thân, bán thân) */
 .thumb-portrait img,
-.feature-thumb img {
+.feature-thumb:not(.feature-cutout-slot) img {
   object-position: top center !important;
   /* Luôn giữ trọn vẹn phần đầu và khuôn mặt của MC */
 }
@@ -2254,16 +2286,126 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   filter: brightness(1.05);
 }
 
-/* Cột Trái: Ảnh dọc MC cao toàn phần */
+/* Cột Trái: Ảnh dọc MC cao toàn phần hoặc Khung Tách Nền */
 .mosaic-col-feature {
+  --mc-shift: 22px;
   display: flex;
+  position: relative;
   height: 100%;
+  z-index: 6;
+  overflow: visible;
 }
 
 .mosaic-col-feature .feature-thumb {
   width: 100%;
   height: 100%;
   min-height: 440px;
+  position: relative;
+}
+
+/* Khung ảnh chính tách nền (Cutout Model Slot) - Chuẩn Style reference image */
+.mosaic-col-feature .feature-thumb.feature-cutout-slot {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  position: relative;
+}
+
+/* Tắt tia quét sáng chữ nhật của thumb đối với slot tách nền */
+.mosaic-col-feature .feature-thumb.feature-cutout-slot::before {
+  display: none !important;
+}
+
+/* Ảnh MC tách nền: ĐÈ LÊN ẢNH VÀ TRÀN SANG GRID (Overlapping 3D Effect) */
+.feature-cutout-slot img.feature-cutout-img {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: auto !important;
+  width: auto !important;
+  height: 98%; /* Thu nhỏ vừa vặn, thanh thoát và không che lấp ảnh bên cạnh */
+  max-width: none !important;
+  max-height: 480px;
+  object-fit: contain !important;
+  object-position: bottom right !important;
+  transform: translateX(var(--mc-shift, 22px));
+  /* Trong suốt 100% viền xung quanh, loại bỏ bóng đen mờ đè lên ảnh */
+  filter: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  z-index: 10;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature-cutout-slot:hover img.feature-cutout-img {
+  transform: translateX(var(--mc-shift, 22px)) translateY(-4px) scale(1.02);
+  filter: none !important;
+}
+
+.feature-cutout-img[src=""],
+.feature-cutout-img:not([src]) {
+  display: none !important;
+}
+
+/* Placeholder khi chưa gắn ảnh tách nền */
+.feature-cutout-placeholder {
+  position: absolute;
+  inset: 0;
+  border: 1.5px dashed rgba(220, 163, 101, 0.4);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  padding: 18px;
+  background: rgba(35, 18, 14, 0.35);
+  color: #e5cdb2;
+  transition: border-color 0.3s ease, background 0.3s ease;
+  z-index: 1;
+}
+
+.feature-cutout-slot:hover .feature-cutout-placeholder {
+  border-color: rgba(220, 163, 101, 0.85);
+  background: rgba(43, 31, 24, 0.55);
+}
+
+/* Ẩn placeholder khi slot đã có ảnh hợp lệ */
+.feature-cutout-slot:has(img.feature-cutout-img[src]:not([src=""])) .feature-cutout-placeholder {
+  display: none !important;
+}
+
+.fcp-star {
+  font-size: 24px;
+  color: #dca365;
+  animation: fcpPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes fcpPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 1; color: #fff; }
+}
+
+.fcp-title {
+  font-family: var(--font-heading, "Playfair Display", Georgia, serif);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #f7e6d2;
+}
+
+.fcp-desc {
+  font-size: 0.75rem;
+  color: rgba(220, 163, 101, 0.8);
+  font-style: italic;
 }
 
 /* Cột Phải: Grid 3 hàng ghép chuẩn mosaic */
@@ -2285,6 +2427,58 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 
 .mosaic-subrow.row-1-col {
   grid-template-columns: 1fr;
+}
+
+/* Layout Grid 4 ảnh đối xứng 2x2 (Dành riêng cho section không có model) */
+.mosaic-layout.mosaic-grid-4 {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 14px;
+}
+
+.mosaic-layout.mosaic-grid-4 .mosaic-thumb {
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  height: auto;
+  min-height: 220px;
+}
+
+/* Layout Grid 5 ảnh (2 - 1 - 2) trải rộng toàn phần (Dành cho section không có model) */
+.mosaic-layout.mosaic-grid-5 {
+  display: block !important;
+}
+
+.mosaic-layout.mosaic-grid-5 .mosaic-col-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+
+.mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-2-cols {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 14px !important;
+}
+
+.mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-2-cols .mosaic-thumb {
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  height: auto;
+  min-height: 200px;
+}
+
+.mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-1-col {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  width: 100% !important;
+}
+
+.mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-1-col .mosaic-thumb.thumb-banner {
+  aspect-ratio: 21 / 9;
+  width: 100%;
+  height: auto;
+  min-height: 220px;
 }
 
 .mosaic-subrow.row-2-cols .mosaic-thumb {
@@ -2453,7 +2647,7 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   }
 
   .mosaic-layout {
-    grid-template-columns: 42fr 58fr;
+    grid-template-columns: 38fr 62fr;
     gap: 8px;
   }
 
@@ -2461,8 +2655,37 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
     border-radius: 8px;
   }
 
+  .mosaic-col-feature {
+    --mc-shift: 24px;
+  }
+
   .mosaic-col-feature .feature-thumb {
     min-height: 340px;
+  }
+
+  .feature-cutout-slot img.feature-cutout-img {
+    height: 98%;
+  }
+
+  .mosaic-layout.mosaic-grid-4 {
+    gap: 8px;
+  }
+
+  .mosaic-layout.mosaic-grid-4 .mosaic-thumb {
+    min-height: 160px;
+  }
+
+  .mosaic-layout.mosaic-grid-5 .mosaic-col-grid,
+  .mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-2-cols {
+    gap: 8px !important;
+  }
+
+  .mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-2-cols .mosaic-thumb {
+    min-height: 150px;
+  }
+
+  .mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-1-col .mosaic-thumb.thumb-banner {
+    min-height: 170px;
   }
 
   .mosaic-col-grid {
@@ -2605,9 +2828,41 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   }
 
+  .mosaic-col-feature {
+    --mc-shift: 16px;
+  }
+
   .mosaic-col-feature .feature-thumb {
     min-height: 330px;
     max-height: 400px;
+  }
+
+  .feature-cutout-slot img.feature-cutout-img {
+    height: 96%;
+  }
+
+  .mosaic-layout.mosaic-grid-4 {
+    gap: 6px;
+  }
+
+  .mosaic-layout.mosaic-grid-4 .mosaic-thumb {
+    min-height: 110px;
+    border-radius: 6px;
+  }
+
+  .mosaic-layout.mosaic-grid-5 .mosaic-col-grid,
+  .mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-2-cols {
+    gap: 6px !important;
+  }
+
+  .mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-2-cols .mosaic-thumb {
+    min-height: 110px;
+    border-radius: 6px;
+  }
+
+  .mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-1-col .mosaic-thumb.thumb-banner {
+    min-height: 120px;
+    border-radius: 6px;
   }
 
   .mosaic-col-grid {
@@ -2755,8 +3010,37 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
     gap: 4px;
   }
 
+  .mosaic-col-feature {
+    --mc-shift: 10px;
+  }
+
   .mosaic-col-feature .feature-thumb {
     min-height: 290px;
+  }
+
+  .feature-cutout-slot img.feature-cutout-img {
+    height: 94%;
+  }
+
+  .mosaic-layout.mosaic-grid-4 {
+    gap: 4px;
+  }
+
+  .mosaic-layout.mosaic-grid-4 .mosaic-thumb {
+    min-height: 95px;
+  }
+
+  .mosaic-layout.mosaic-grid-5 .mosaic-col-grid,
+  .mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-2-cols {
+    gap: 4px !important;
+  }
+
+  .mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-2-cols .mosaic-thumb {
+    min-height: 95px;
+  }
+
+  .mosaic-layout.mosaic-grid-5 .mosaic-subrow.row-1-col .mosaic-thumb.thumb-banner {
+    min-height: 100px;
   }
 
   .mosaic-col-grid {

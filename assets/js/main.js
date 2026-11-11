@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   zoomableElements.forEach(item => {
     item.addEventListener('click', () => {
-      const src = item.dataset.zoom || item.querySelector('img')?.src;
+      const src = (item.dataset.zoom || '').trim() || (item.querySelector('img')?.getAttribute('src') || '').trim();
       if (src && lightboxImg && lightboxModal) {
         lightboxImg.src = src;
         lightboxModal.classList.add('active');
