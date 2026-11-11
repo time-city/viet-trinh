@@ -1932,33 +1932,32 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 
 /* SECTION 6: FEATURED EVENT SHOWCASE */
 .section-featured-event {
-  padding: 45px 0 65px;
+  padding: 50px 0 75px;
   position: relative;
   background: #f8f1e4;
 }
 
 .section-featured-event .container {
-  width: 100% !important;
-  max-width: 100% !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  width: 100%;
+  max-width: var(--container-width, 1200px);
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 .events-section-header {
   text-align: center;
   max-width: 860px;
-  margin: 0 auto 32px;
+  margin: 0 auto 36px;
   padding: 0 20px;
 }
 
 .events-stacked-wrapper {
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
 }
 
 .event-showcase-card {
@@ -5590,28 +5589,29 @@ body.curtain-revealed #hero .hero-sparkles-wrap,
 .event-mosaic-card.insta-event-card {
   width: 100% !important;
   max-width: 100% !important;
-  margin: 0 !important;
-  padding: 24px 28px 26px;
+  margin: 0 auto !important;
+  padding: 26px 30px 24px;
   background: #3a060e;
   background: linear-gradient(155deg, #4f0b15 0%, #35050d 50%, #200206 100%);
-  border-top: 1.5px solid rgba(220, 163, 101, 0.45);
-  border-bottom: 1.5px solid rgba(220, 163, 101, 0.45);
-  border-left: none !important;
-  border-right: none !important;
-  border-radius: 0 !important;
-  box-shadow: 0 16px 40px rgba(35, 3, 8, 0.5);
+  border: 1.5px solid rgba(220, 163, 101, 0.45) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 18px 48px rgba(45, 5, 12, 0.45), 0 0 24px rgba(220, 163, 101, 0.12);
   position: relative;
-  overflow: hidden;
-  transition: border-color 0.3s ease;
+  overflow: visible !important;
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   contain: layout paint;
   box-sizing: border-box !important;
 }
 
 .insta-event-card::before,
 .event-mosaic-card.insta-event-card::before {
-  border-radius: 0 !important;
-  border-left: none !important;
-  border-right: none !important;
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 235, 185, 0.18) !important;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .insta-event-card::after,
@@ -5629,14 +5629,17 @@ body.curtain-revealed #hero .hero-sparkles-wrap,
 }
 
 .insta-event-card:hover {
-  transform: none;
-  border-color: rgba(220, 163, 101, 0.75);
+  transform: translateY(-3px);
+  border-color: rgba(220, 163, 101, 0.85) !important;
+  box-shadow: 0 22px 55px rgba(45, 5, 12, 0.55), 0 0 30px rgba(220, 163, 101, 0.22);
 }
 
-.insta-event-card > * {
-  max-width: 1080px;
-  margin-left: auto;
-  margin-right: auto;
+.insta-event-card > *:not(.card-sparkles-wrap) {
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
 }
 
 .insta-event-card .insta-carousel,
@@ -5743,9 +5746,9 @@ body.curtain-revealed #hero .hero-sparkles-wrap,
 
 /* Post Title */
 .insta-post-title {
-  margin: 0 0 12px !important;
+  margin: 0 0 14px 0 !important;
   font-family: var(--font-heading, 'Playfair Display', serif);
-  font-size: 1.3rem !important;
+  font-size: clamp(1.22rem, 1.55vw, 1.45rem) !important;
   line-height: 1.35 !important;
   color: #fcebd2 !important;
   text-align: left;
@@ -5969,18 +5972,42 @@ body.curtain-revealed #hero .hero-sparkles-wrap,
 
 /* RESPONSIVE DESIGN */
 @media (max-width: 900px) {
+  .section-featured-event .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .events-stacked-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    gap: 18px !important;
+  }
+
   .insta-event-card,
   .event-mosaic-card.insta-event-card {
-    padding: 18px 16px 20px;
+    padding: 18px 16px 20px !important;
     border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
     margin: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
     contain-intrinsic-size: 520px;
   }
 
+  .insta-event-card::before,
+  .event-mosaic-card.insta-event-card::before {
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+
   .insta-post-title {
     font-size: 1.18rem !important;
+    margin-bottom: 12px !important;
   }
 
   .insta-carousel {
