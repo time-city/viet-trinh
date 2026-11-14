@@ -733,4 +733,122 @@ document.addEventListener('DOMContentLoaded', () => {
     skillsObserver.observe(skillsCounter);
   }
 
+  // ==========================================================================
+  // 17. PARTNERS CONVEYOR - TRIANGULAR CENTER SPOTLIGHT (HIỆU ỨNG ĐỈNH TAM GIÁC)
+  // Khi logo chạy đến giữa màn hình sẽ to nổi lên (scale 1.35x, nâng cao, phát sáng)
+  // và thoải dần về 2 bên mép (scale 0.88x, mờ dần)
+  // ==========================================================================
+  function initTriangularBrandConveyor() {
+    const container = document.querySelector('.brand-conveyor-container');
+    if (!container) return;
+
+    const cards = container.querySelectorAll('.brand-item-card');
+    if (!cards.length) return;
+
+    let isVisible = false;
+    let rafId = null;
+
+    // Chỉ chạy loop khi section nằm trong viewport (0% CPU khi không nhìn tới)
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isVisible = entry.isIntersecting;
+          if (isVisible) {
+            if (!rafId) rafId = requestAnimationFrame(updateSpotlight);
+          } else {
+            if (rafId) {
+              cancelAnimationFrame(rafId);
+              rafId = null;
+            }
+          }
+        });
+      }, { threshold: 0.05, rootMargin: '100px 0px' });
+
+      observer.observe(container);
+    } else {
+      isVisible = true;
+      rafId = requestAnimationFrame(updateSpotlight);
+    }
+
+    function updateSpotlight() {
+      if (!isVisible) {
+        rafId = null;
+        return;
+      }
+
+      const containerRect = container.getBoundingClientRect();
+      const centerX = containerRect.left + containerRect.width / 2;
+      // Bán kính vùng tam giác: khoảng 44% bề rộng container
+      const maxDist = Math.max(containerRect.width * 0.44, 180);
+      const isMobile = window.innerWidth <= 600;
+
+      // Biên độ co giãn kiểu tam giác
+      const minScale = isMobile ? 0.85 : 0.88;
+      const maxScale = isMobile ? 1.26 : 1.35;
+      const scaleDelta = maxScale - minScale;
+      const minOpacity = isMobile ? 0.60 : 0.65;
+      const opacityDelta = 1 - minOpacity;
+      const maxTranslateY = isMobile ? -6 : -10;
+
+      for (let i = 0; i < cards.length; i++) {
+        const card = cards[i];
+        const cardRect = card.getBoundingClientRect();
+
+        // Bỏ qua các card nằm ngoài màn hình để tối ưu tuyệt đối
+        if (cardRect.right < containerRect.left - 40 || cardRect.left > containerRect.right + 40) {
+          if (card._activeSpotlight) {
+            card.style.transform = '';
+            card.style.opacity = '';
+            card.style.zIndex = '';
+            card.classList.remove('is-spotlight-peak');
+            card._activeSpotlight = false;
+          }
+          continue;
+        }
+
+        const cardCenterX = cardRect.left + cardRect.width / 2;
+        const dist = Math.abs(centerX - cardCenterX);
+
+        if (dist < maxDist) {
+          // Hàm cosinus tạo đỉnh tam giác mượt mà (1 ở tâm, 0 ở biên)
+          const norm = dist / maxDist;
+          const peak = Math.cos(norm * (Math.PI / 2));
+          const peakCurve = Math.pow(peak, 1.25); // Đỉnh nhọn và nổi bật rõ rệt
+
+          const scale = minScale + scaleDelta * peakCurve;
+          const opacity = minOpacity + opacityDelta * peak;
+          const translateY = maxTranslateY * peakCurve;
+
+          card.style.transform = `scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
+          card.style.opacity = opacity.toFixed(2);
+          card.style.zIndex = Math.round(2 + peakCurve * 18);
+
+          if (peakCurve > 0.65) {
+            if (!card.classList.contains('is-spotlight-peak')) {
+              card.classList.add('is-spotlight-peak');
+            }
+          } else {
+            if (card.classList.contains('is-spotlight-peak')) {
+              card.classList.remove('is-spotlight-peak');
+            }
+          }
+
+          card._activeSpotlight = true;
+        } else {
+          if (card._activeSpotlight) {
+            card.style.transform = `scale(${minScale})`;
+            card.style.opacity = minOpacity.toString();
+            card.style.zIndex = '1';
+            card.classList.remove('is-spotlight-peak');
+            card._activeSpotlight = false;
+          }
+        }
+      }
+
+      rafId = requestAnimationFrame(updateSpotlight);
+    }
+  }
+
+  initTriangularBrandConveyor();
+
 });

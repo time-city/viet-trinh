@@ -2574,37 +2574,51 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   background: #4a0610;
 }
 
-/* Băng Chuyền Logo 2 Hàng (Infinite Conveyor Marquee) */
+/* Băng Chuyền Logo 2 Hàng (Infinite Conveyor Marquee) - Hiệu ứng Đỉnh Tam Giác (Center Spotlight Peak) */
 .brand-conveyor-container {
   position: relative;
   overflow: hidden;
   width: 100%;
-  padding: 6px 0;
+  padding: 10px 0 16px;
+}
+
+/* Đèn rọi sân khấu trung tâm (Spotlight chiếu đỉnh tam giác) */
+.brand-conveyor-spotlight {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 420px;
+  height: 100%;
+  background: radial-gradient(ellipse at 50% 35%, rgba(255, 215, 0, 0.16) 0%, rgba(220, 163, 101, 0.06) 50%, transparent 80%);
+  pointer-events: none;
+  z-index: 6;
 }
 
 .conveyor-fade-mask {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 80px;
-  z-index: 5;
+  width: 100px;
+  z-index: 10;
   pointer-events: none;
 }
 
 .mask-left {
   left: 0;
-  background: linear-gradient(to right, #1c0206 15%, rgba(28, 2, 6, 0) 100%);
+  background: linear-gradient(to right, #1c0206 20%, rgba(28, 2, 6, 0) 100%);
 }
 
 .mask-right {
   right: 0;
-  background: linear-gradient(to left, #1c0206 15%, rgba(28, 2, 6, 0) 100%);
+  background: linear-gradient(to left, #1c0206 20%, rgba(28, 2, 6, 0) 100%);
 }
 
 .conveyor-row-wrapper {
   overflow: hidden;
   width: 100%;
-  margin-bottom: 14px;
+  margin-bottom: 6px;
+  padding: 18px 0;
   position: relative;
 }
 
@@ -2614,7 +2628,7 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 
 .conveyor-track {
   display: flex;
-  gap: 16px;
+  gap: 18px;
   width: max-content;
   will-change: transform;
   user-select: none;
@@ -2652,24 +2666,24 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   }
 }
 
-/* Thẻ Brand Item Card */
+/* Thẻ Brand Item Card - Thiết kế sang trọng, sắc nét */
 .brand-item-card {
   position: relative;
   flex-shrink: 0;
-  width: 142px;
-  height: 74px;
+  width: 156px;
+  height: 82px;
   background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid rgba(80, 18, 23, 0.08);
-  box-shadow: 0 3px 12px rgba(80, 18, 23, 0.04);
+  border-radius: 14px;
+  border: 1.5px solid rgba(220, 163, 101, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 12px;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.28s ease;
+  padding: 10px 14px;
   cursor: pointer;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .brand-item-card img {
@@ -2677,45 +2691,60 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   max-height: 100%;
   object-fit: contain;
   display: block;
-  filter: contrast(1.02);
-  transition: transform 0.28s ease;
+  filter: contrast(1.04) brightness(1.01);
+  pointer-events: none;
+}
+
+/* Brand đạt đỉnh tâm tam giác (Spotlight Peak - Nổi bật cực đại) */
+.brand-item-card.is-spotlight-peak {
+  border-color: rgba(255, 215, 0, 0.95) !important;
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(255, 215, 0, 0.45),
+    0 0 0 2px rgba(255, 215, 0, 0.85) !important;
+  background: #ffffff !important;
+}
+
+.brand-item-card.is-spotlight-peak img {
+  filter: contrast(1.1) brightness(1.04) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15)) !important;
 }
 
 .brand-item-card:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 10px 24px rgba(80, 18, 23, 0.12);
-  border-color: rgba(212, 175, 55, 0.5);
-  z-index: 4;
+  transform: translateY(-6px) scale(1.12) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 24px rgba(255, 215, 0, 0.5) !important;
+  border-color: #ffd700 !important;
+  z-index: 30 !important;
+  opacity: 1 !important;
 }
 
 /* Brand lớn VIP (Làm nổi bật theo yêu cầu) */
 .brand-item-card.vip-brand {
   background: linear-gradient(145deg, #ffffff 0%, #fffdf8 100%);
-  border: 1.5px solid rgba(212, 175, 55, 0.5);
-  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.14);
-}
-
-.brand-item-card.vip-brand:hover {
-  border-color: #d4af37;
-  box-shadow: 0 12px 28px rgba(212, 175, 55, 0.3), 0 4px 12px rgba(80, 18, 23, 0.1);
-  transform: translateY(-5px) scale(1.08);
+  border: 1.5px solid rgba(220, 163, 101, 0.55);
 }
 
 .vip-badge-tag {
   position: absolute;
-  top: 3px;
-  right: 5px;
-  font-size: 8px;
+  top: 4px;
+  right: 6px;
+  font-size: 8.5px;
   font-weight: 800;
   line-height: 1;
-  padding: 2px 5px;
-  border-radius: 5px;
+  padding: 2.5px 6px;
+  border-radius: 6px;
   background: linear-gradient(135deg, #fff7d6 0%, #fde69e 100%);
-  color: #8c5a08;
-  border: 0.5px solid rgba(212, 175, 55, 0.6);
-  letter-spacing: 0.3px;
+  color: #704502;
+  border: 0.5px solid rgba(212, 175, 55, 0.7);
+  letter-spacing: 0.4px;
   pointer-events: none;
-  box-shadow: 0 1px 4px rgba(212, 175, 55, 0.25);
+  box-shadow: 0 1px 4px rgba(212, 175, 55, 0.35);
+  transition: all 0.25s ease;
+}
+
+.brand-item-card.is-spotlight-peak .vip-badge-tag {
+  background: linear-gradient(135deg, #ffd700 0%, #ffae00 100%);
+  color: #1a0205;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.6);
 }
 
 /* ==========================================================================
@@ -5453,29 +5482,34 @@ body.guide-mode-active [data-placeholder]::before {
   }
 
   .conveyor-fade-mask {
-    width: 36px;
+    width: 45px;
+  }
+
+  .brand-conveyor-spotlight {
+    width: 240px;
+  }
+
+  .conveyor-row-wrapper {
+    margin-bottom: 4px;
+    padding: 12px 0;
   }
 
   .brand-item-card {
-    width: 116px;
-    height: 60px;
-    border-radius: 10px;
-    padding: 6px 8px;
+    width: 126px;
+    height: 66px;
+    border-radius: 11px;
+    padding: 7px 10px;
   }
 
   .vip-badge-tag {
     font-size: 7.5px;
-    padding: 1.5px 4px;
+    padding: 1.5px 4.5px;
     top: 2px;
     right: 3px;
   }
 
   .conveyor-track {
-    gap: 10px;
-  }
-
-  .conveyor-row-wrapper {
-    margin-bottom: 10px;
+    gap: 12px;
   }
 
   .row-move-left {
@@ -6758,6 +6792,43 @@ body.curtain-revealed #hero .hero-sparkles-wrap,
   border-radius: 20px;
 }
 
+/* Header Right Container & Sun Group Logo Pill */
+.insta-header-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.bds-partner-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 4px 13px;
+  background: rgba(22, 2, 5, 0.78);
+  border: 1.2px solid rgba(255, 215, 0, 0.45);
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(255, 215, 0, 0.08);
+  flex-shrink: 0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.bds-partner-pill:hover {
+  transform: translateY(-1px) scale(1.03);
+  border-color: rgba(255, 215, 0, 0.75);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 14px rgba(255, 215, 0, 0.35);
+}
+
+.bds-partner-logo-img {
+  height: 22px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.65));
+}
+
 /* Post Title */
 .insta-post-title {
   margin: 0 0 14px 0 !important;
@@ -7071,6 +7142,19 @@ body.curtain-revealed #hero .hero-sparkles-wrap,
   .insta-header-badge {
     font-size: 0.66rem;
     padding: 3px 8px;
+  }
+
+  .insta-header-right {
+    gap: 6px;
+  }
+
+  .bds-partner-pill {
+    height: 27px;
+    padding: 3px 10px;
+  }
+
+  .bds-partner-logo-img {
+    height: 18px;
   }
 
   .insta-post-title {
