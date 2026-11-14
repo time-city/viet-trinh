@@ -208,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const animateCounter = (el) => {
     const target = parseInt(el.dataset.counter, 10);
+    const prefix = el.dataset.prefix || '';
     const suffix = el.dataset.suffix || '';
     if (isNaN(target)) return;
 
@@ -225,12 +226,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const eased = easeOutExpo(progress);
       const current = Math.floor(eased * target);
 
-      el.textContent = current + suffix;
+      el.textContent = prefix + current + suffix;
 
       if (progress < 1) {
         el._rafId = requestAnimationFrame(updateCount);
       } else {
-        el.textContent = target + suffix;
+        el.textContent = prefix + target + suffix;
         el.classList.add('count-done');
         setTimeout(() => el.classList.remove('count-done'), 700);
       }
@@ -244,8 +245,9 @@ document.addEventListener('DOMContentLoaded', () => {
       cancelAnimationFrame(el._rafId);
       el._rafId = null;
     }
+    const prefix = el.dataset.prefix || '';
     const suffix = el.dataset.suffix || '';
-    el.textContent = '0' + suffix;
+    el.textContent = prefix + '0' + suffix;
     el.classList.remove('count-done');
   };
 
@@ -694,211 +696,41 @@ document.addEventListener('DOMContentLoaded', () => {
   initSpotlightVideos();
 
   // ==========================================================================
-  // 15. FEEDBACK CAROUSEL (Tự động lướt mượt mà, vuốt chạm, kéo chuột, lightbox)
+  // 15. FEEDBACK BANNER (Tĩnh, không lướt – chỉ nhảy số 1000+ khi cuộn tới)
   // ==========================================================================
-  function initFeedbackCarousel() {
-    const wrapper = document.querySelector('.feedback-carousel-wrapper');
-    if (!wrapper) return;
+  function initFeedbackBanner() {
+    const fbSection = document.getElementById('feedback');
+    if (!fbSection) return;
+    const num = fbSection.querySelector('.fb-wall-number[data-counter]');
+    if (!num || !('IntersectionObserver' in window)) return;
 
-    const track = wrapper.querySelector('.feedback-track');
-    const prevBtn = wrapper.querySelector('.fb-prev');
-    const nextBtn = wrapper.querySelector('.fb-next');
-    if (!track) return;
-
-    const AUTO_INTERVAL = 3200; // Tự động lướt sau mỗi 3.2s
-    const RESUME_DELAY = 4000;  // Chờ 4s sau khi người dùng chạm/thao tác trước khi tự lướt tiếp
-    let autoTimer = null;
-    let resumeTimeout = null;
-    let isIntersecting = false;
-    let isInteracting = false;
-
-    function getStep() {
-      const firstSlide = track.querySelector('.feedback-slide');
-      return (firstSlide ? firstSlide.offsetWidth : 280) + 20;
-    }
-
-    // Tự động lướt tiến tới ảnh tiếp theo
-    function slideNext() {
-      const step = getStep();
-      const maxScroll = track.scrollWidth - track.clientWidth;
-      if (track.scrollLeft >= maxScroll - 20) {
-        // Đã đến ảnh cuối cùng -> mượt mà lướt về đầu
-        track.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        track.scrollBy({ left: step, behavior: 'smooth' });
-      }
-    }
-
-    // Tự động lướt lùi lại ảnh trước
-    function slidePrev() {
-      const step = getStep();
-      if (track.scrollLeft <= 20) {
-        const maxScroll = track.scrollWidth - track.clientWidth;
-        track.scrollTo({ left: maxScroll, behavior: 'smooth' });
-      } else {
-        track.scrollBy({ left: -step, behavior: 'smooth' });
-      }
-    }
-
-    function startAutoSlide() {
-      stopAutoSlide();
-      if (!isIntersecting || isInteracting) return;
-      autoTimer = setInterval(() => {
-        // Nếu modal lightbox đang mở thì tạm dừng
-        const lbModal = document.getElementById('lightboxModal');
-        if (lbModal && lbModal.classList.contains('active')) return;
-
-        if (!isInteracting && isIntersecting) {
-          slideNext();
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(num);
+          obs.unobserve(entry.target);
         }
-      }, AUTO_INTERVAL);
-    }
-
-    function stopAutoSlide() {
-      if (autoTimer) {
-        clearInterval(autoTimer);
-        autoTimer = null;
-      }
-    }
-
-    function pauseAndResumeLater(delay = RESUME_DELAY) {
-      stopAutoSlide();
-      if (resumeTimeout) clearTimeout(resumeTimeout);
-      resumeTimeout = setTimeout(() => {
-        if (!isInteracting && isIntersecting) {
-          startAutoSlide();
-        }
-      }, delay);
-    }
-
-    isIntersecting = true;
-    startAutoSlide();
-
-    // Kích hoạt tự động lướt khi section Feedback hiển thị trên khung nhìn màn hình
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          isIntersecting = entry.isIntersecting;
-          if (isIntersecting) {
-            startAutoSlide();
-          } else {
-            stopAutoSlide();
-          }
-        });
-      }, { rootMargin: '100px 0px 100px 0px', threshold: 0 });
-      observer.observe(wrapper);
-    }
-
-    // Dừng khi ẩn tab trình duyệt, chạy lại khi quay lại trang
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        stopAutoSlide();
-      } else if (isIntersecting && !isInteracting) {
-        startAutoSlide();
-      }
-    });
-
-    // Tạm dừng khi di chuột vào (Desktop Hover)
-    wrapper.addEventListener('mouseenter', () => {
-      isInteracting = true;
-      stopAutoSlide();
-    });
-
-    wrapper.addEventListener('mouseleave', () => {
-      isInteracting = false;
-      pauseAndResumeLater(1500);
-    });
-
-    // Tạm dừng khi chạm vuốt trên màn hình điện thoại (Mobile Touch)
-    track.addEventListener('touchstart', () => {
-      isInteracting = true;
-      stopAutoSlide();
-    }, { passive: true });
-
-    track.addEventListener('touchend', () => {
-      isInteracting = false;
-      pauseAndResumeLater(RESUME_DELAY);
-    }, { passive: true });
-
-    // Điều hướng bằng nút bấm mũi tên trái / phải
-    if (prevBtn) {
-      prevBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        slidePrev();
-        pauseAndResumeLater(RESUME_DELAY);
       });
-    }
-
-    if (nextBtn) {
-      nextBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        slideNext();
-        pauseAndResumeLater(RESUME_DELAY);
-      });
-    }
-
-    // Kéo trượt bằng chuột trên máy tính (Mouse Drag-to-Scroll)
-    let isDown = false;
-    let startX = 0;
-    let scrollLeftPos = 0;
-    let hasDragged = false;
-
-    track.addEventListener('mousedown', (e) => {
-      // Chỉ kích hoạt khi nhấn chuột trái
-      if (e.button !== 0) return;
-      isDown = true;
-      hasDragged = false;
-      isInteracting = true;
-      stopAutoSlide();
-      track.classList.add('is-dragging');
-      startX = e.pageX - track.offsetLeft;
-      scrollLeftPos = track.scrollLeft;
-    });
-
-    window.addEventListener('mouseup', () => {
-      if (!isDown) return;
-      isDown = false;
-      track.classList.remove('is-dragging');
-      isInteracting = false;
-      pauseAndResumeLater(RESUME_DELAY);
-      // Reset flag sau một chu kỳ nhỏ để tránh kích hoạt click mở lightbox nhầm
-      setTimeout(() => {
-        hasDragged = false;
-      }, 60);
-    });
-
-    let dragTicking = false;
-    track.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - track.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      if (Math.abs(walk) > 6) {
-        hasDragged = true;
-      }
-      if (!dragTicking) {
-        requestAnimationFrame(() => {
-          track.scrollLeft = scrollLeftPos - walk;
-          dragTicking = false;
-        });
-        dragTicking = true;
-      }
-    });
-
-    // Chặn sự kiện click mở lightbox nếu người dùng vừa thực hiện thao tác kéo chuột
-    track.addEventListener(
-      'click',
-      (e) => {
-        if (hasDragged) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      },
-      true
-    );
+    }, { threshold: 0.3 });
+    observer.observe(fbSection);
   }
 
-  // Khởi chạy Feedback Carousel
-  initFeedbackCarousel();
+    initFeedbackBanner();
+
+  // ==========================================================================
+  // 16. SKILLS SECTION COUNTER ANIMATION
+  // ==========================================================================
+  const skillsCounter = document.querySelector('.skills-exp-card [data-counter]');
+  if (skillsCounter && 'IntersectionObserver' in window) {
+    const skillsObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(skillsCounter);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    skillsObserver.observe(skillsCounter);
+  }
 
 });
