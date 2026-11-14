@@ -2574,23 +2574,24 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   background: #4a0610;
 }
 
-/* Băng Chuyền Logo 2 Hàng (Infinite Conveyor Marquee) - Hiệu ứng Đỉnh Tam Giác (Center Spotlight Peak) */
+/* Băng Chuyền Logo 1 Hàng Duy Nhất (Infinite Conveyor Marquee) - Hiệu ứng Đỉnh Tam Giác 3D Xoay Vòng */
 .brand-conveyor-container {
   position: relative;
   overflow: hidden;
   width: 100%;
-  padding: 10px 0 16px;
+  padding: 44px 0 40px;
+  perspective: 1200px;
 }
 
 /* Đèn rọi sân khấu trung tâm (Spotlight chiếu đỉnh tam giác) */
 .brand-conveyor-spotlight {
   position: absolute;
-  top: -10px;
+  top: -15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 420px;
+  width: 460px;
   height: 100%;
-  background: radial-gradient(ellipse at 50% 35%, rgba(255, 215, 0, 0.16) 0%, rgba(220, 163, 101, 0.06) 50%, transparent 80%);
+  background: radial-gradient(ellipse at 50% 35%, rgba(255, 215, 0, 0.25) 0%, rgba(220, 163, 101, 0.08) 50%, transparent 80%);
   pointer-events: none;
   z-index: 6;
 }
@@ -2615,23 +2616,21 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 }
 
 .conveyor-row-wrapper {
-  overflow: hidden;
+  overflow: visible;
   width: 100%;
-  margin-bottom: 6px;
-  padding: 18px 0;
+  margin: 0 auto;
+  padding: 20px 0;
   position: relative;
-}
-
-.conveyor-row-wrapper:last-child {
-  margin-bottom: 0;
+  transform-style: preserve-3d;
 }
 
 .conveyor-track {
   display: flex;
-  gap: 18px;
+  gap: 22px;
   width: max-content;
   will-change: transform;
   user-select: none;
+  transform-style: preserve-3d;
 }
 
 .conveyor-track:hover {
@@ -2639,11 +2638,11 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 }
 
 .row-move-left {
-  animation: marqueeLeft 42s linear infinite;
+  animation: marqueeLeft 56s linear infinite;
 }
 
 .row-move-right {
-  animation: marqueeRight 44s linear infinite;
+  animation: marqueeRight 56s linear infinite;
 }
 
 @keyframes marqueeLeft {
@@ -2683,6 +2682,8 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   cursor: pointer;
   transform-origin: center center;
   will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -2697,16 +2698,16 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 
 /* Brand đạt đỉnh tâm tam giác (Spotlight Peak - Nổi bật cực đại) */
 .brand-item-card.is-spotlight-peak {
-  border-color: rgba(255, 215, 0, 0.95) !important;
+  border-color: rgba(255, 215, 0, 0.98) !important;
   box-shadow:
-    0 16px 36px rgba(0, 0, 0, 0.8),
-    0 0 30px rgba(255, 215, 0, 0.45),
-    0 0 0 2px rgba(255, 215, 0, 0.85) !important;
+    0 22px 48px rgba(0, 0, 0, 0.88),
+    0 0 38px rgba(255, 215, 0, 0.65),
+    0 0 0 2.5px rgba(255, 215, 0, 0.9) !important;
   background: #ffffff !important;
 }
 
 .brand-item-card.is-spotlight-peak img {
-  filter: contrast(1.1) brightness(1.04) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15)) !important;
+  filter: contrast(1.12) brightness(1.05) drop-shadow(0 2px 5px rgba(0, 0, 0, 0.18)) !important;
 }
 
 .brand-item-card:hover {
@@ -3488,6 +3489,15 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 .mosaic-col-grid.grid-2-rows .mosaic-subrow.row-2-cols .mosaic-thumb,
 .mosaic-col-grid.grid-2-rows .mosaic-subrow.row-1-col .mosaic-thumb.thumb-banner {
   min-height: 200px;
+}
+
+/* Biến thể Mosaic 6 ảnh chia 3 hàng đều nhau (Dành cho section 7 ảnh) */
+.mosaic-col-grid.grid-3-even-rows {
+  grid-template-rows: repeat(3, 1fr) !important;
+}
+
+.mosaic-col-grid.grid-3-even-rows .mosaic-subrow.row-2-cols .mosaic-thumb {
+  min-height: 135px;
 }
 
 /* Biến thể 3 ảnh chân dung đứng (Trio Columns) */
@@ -5485,20 +5495,25 @@ body.guide-mode-active [data-placeholder]::before {
     width: 45px;
   }
 
+  .brand-conveyor-container {
+    padding: 34px 0 28px;
+    perspective: 800px;
+  }
+
   .brand-conveyor-spotlight {
-    width: 240px;
+    width: 260px;
   }
 
   .conveyor-row-wrapper {
-    margin-bottom: 4px;
-    padding: 12px 0;
+    margin: 0 auto;
+    padding: 16px 0;
   }
 
   .brand-item-card {
-    width: 126px;
-    height: 66px;
-    border-radius: 11px;
-    padding: 7px 10px;
+    width: 134px;
+    height: 70px;
+    border-radius: 12px;
+    padding: 8px 11px;
   }
 
   .vip-badge-tag {

@@ -762,7 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
         });
-      }, { threshold: 0.05, rootMargin: '100px 0px' });
+      }, { threshold: 0.05, rootMargin: '120px 0px' });
 
       observer.observe(container);
     } else {
@@ -778,24 +778,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const containerRect = container.getBoundingClientRect();
       const centerX = containerRect.left + containerRect.width / 2;
-      // Bán kính vùng tam giác: khoảng 44% bề rộng container
-      const maxDist = Math.max(containerRect.width * 0.44, 180);
       const isMobile = window.innerWidth <= 600;
 
-      // Biên độ co giãn kiểu tam giác
-      const minScale = isMobile ? 0.85 : 0.88;
-      const maxScale = isMobile ? 1.26 : 1.35;
+      // Phạm vi vùng tam giác: khoảng 42% - 46% bề rộng container
+      const maxDist = Math.max(containerRect.width * (isMobile ? 0.46 : 0.42), 160);
+
+      // Tham số đỉnh tam giác & 3D xoay vòng
+      const minScale = isMobile ? 0.72 : 0.76;
+      const maxScale = isMobile ? 1.34 : 1.45;
       const scaleDelta = maxScale - minScale;
-      const minOpacity = isMobile ? 0.60 : 0.65;
-      const opacityDelta = 1 - minOpacity;
-      const maxTranslateY = isMobile ? -6 : -10;
+
+      const apexLift = isMobile ? -24 : -36;   // Đỉnh tam giác nhô cao vượt trội
+      const baseDrop = isMobile ? 10 : 14;     // Hai cạnh đáy tam giác hạ thấp xuống
+
+      const maxRotateY = isMobile ? 22 : 26;   // Góc xoay 3D nghiêng về tâm (xoay vòng)
+      const maxRotateZ = isMobile ? 2.8 : 3.5; // Góc dốc mái tam giác
+      const maxTranslateZ = isMobile ? 55 : 80; // Độ nổi 3D tiến về phía người xem
 
       for (let i = 0; i < cards.length; i++) {
         const card = cards[i];
         const cardRect = card.getBoundingClientRect();
 
-        // Bỏ qua các card nằm ngoài màn hình để tối ưu tuyệt đối
-        if (cardRect.right < containerRect.left - 40 || cardRect.left > containerRect.right + 40) {
+        // Bỏ qua các card nằm ngoài màn hình để tối ưu 60fps tuyệt đối
+        if (cardRect.right < containerRect.left - 50 || cardRect.left > containerRect.right + 50) {
           if (card._activeSpotlight) {
             card.style.transform = '';
             card.style.opacity = '';
@@ -807,23 +812,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const cardCenterX = cardRect.left + cardRect.width / 2;
-        const dist = Math.abs(centerX - cardCenterX);
+        const signedDist = cardCenterX - centerX;
+        const dist = Math.abs(signedDist);
 
         if (dist < maxDist) {
-          // Hàm cosinus tạo đỉnh tam giác mượt mà (1 ở tâm, 0 ở biên)
+          // Hàm cosinus tạo đường cong tam giác dốc rõ rệt (1 ở đỉnh tâm, 0 ở chân 2 bên)
           const norm = dist / maxDist;
           const peak = Math.cos(norm * (Math.PI / 2));
-          const peakCurve = Math.pow(peak, 1.25); // Đỉnh nhọn và nổi bật rõ rệt
+          const peakCurve = Math.pow(peak, 1.35); // Đỉnh nhọn và nổi bật rõ rệt
 
           const scale = minScale + scaleDelta * peakCurve;
-          const opacity = minOpacity + opacityDelta * peak;
-          const translateY = maxTranslateY * peakCurve;
+          const translateY = (apexLift * peakCurve) + (baseDrop * (1 - peakCurve));
+          const translateZ = (maxTranslateZ * peakCurve) - (25 * (1 - peakCurve));
 
-          card.style.transform = `scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
+          // Hướng xoay 3D: bên trái nghiêng hướng vào tâm, bên phải nghiêng hướng vào tâm
+          const dir = signedDist < 0 ? 1 : -1;
+          const rotateY = (1 - peak) * maxRotateY * dir;
+          const rotateZ = (1 - peak) * maxRotateZ * (-dir);
+
+          const opacity = 0.55 + 0.45 * peak;
+          const zIndex = Math.round(2 + peakCurve * 28);
+
+          card.style.transform = `perspective(1000px) translateY(${translateY.toFixed(1)}px) translateZ(${translateZ.toFixed(1)}px) rotateY(${rotateY.toFixed(1)}deg) rotateZ(${rotateZ.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
           card.style.opacity = opacity.toFixed(2);
-          card.style.zIndex = Math.round(2 + peakCurve * 18);
+          card.style.zIndex = zIndex.toString();
 
-          if (peakCurve > 0.65) {
+          if (peakCurve > 0.58) {
             if (!card.classList.contains('is-spotlight-peak')) {
               card.classList.add('is-spotlight-peak');
             }
@@ -836,8 +850,11 @@ document.addEventListener('DOMContentLoaded', () => {
           card._activeSpotlight = true;
         } else {
           if (card._activeSpotlight) {
-            card.style.transform = `scale(${minScale})`;
-            card.style.opacity = minOpacity.toString();
+            const dir = signedDist < 0 ? 1 : -1;
+            const rotateY = maxRotateY * dir;
+            const rotateZ = maxRotateZ * (-dir);
+            card.style.transform = `perspective(1000px) translateY(${baseDrop}px) translateZ(-25px) rotateY(${rotateY.toFixed(1)}deg) rotateZ(${rotateZ.toFixed(1)}deg) scale(${minScale})`;
+            card.style.opacity = '0.50';
             card.style.zIndex = '1';
             card.classList.remove('is-spotlight-peak');
             card._activeSpotlight = false;
