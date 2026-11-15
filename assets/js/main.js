@@ -745,6 +745,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = container.querySelectorAll('.brand-item-card');
     if (!cards.length) return;
 
+    // Hỗ trợ chạm giữ trên mobile để dừng xem kỹ, buông tay tiếp tục chạy
+    const tracks = container.querySelectorAll('.conveyor-track');
+    tracks.forEach(track => {
+      track.addEventListener('touchstart', () => {
+        track.style.animationPlayState = 'paused';
+      }, { passive: true });
+      track.addEventListener('touchend', () => {
+        track.style.animationPlayState = 'running';
+      }, { passive: true });
+      track.addEventListener('touchcancel', () => {
+        track.style.animationPlayState = 'running';
+      }, { passive: true });
+    });
+
     let isVisible = false;
     let rafId = null;
 

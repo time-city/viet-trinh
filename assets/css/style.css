@@ -391,6 +391,15 @@ header,
 }
 
 /* Viên Pill Chuyên Gia MC Bất Động Sản Nổi Bật: Nền Đỏ Đô - Chữ Màu Trắng */
+.hero-badge-pill.pill-vtv {
+  background: linear-gradient(135deg, #7c1221 0%, #4a0610 100%);
+  color: #ffd700 !important;
+  border: 1.5px solid rgba(255, 215, 0, 0.75);
+  box-shadow: 0 6px 20px rgba(124, 18, 33, 0.4), 0 0 12px rgba(255, 215, 0, 0.25);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  font-weight: 800;
+}
+
 .hero-badge-pill.pill-bordeaux,
 .hero-badge-pill:first-child {
   background: linear-gradient(135deg, #7c1221 0%, #540a15 100%);
@@ -1065,6 +1074,7 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 
 .stats-card-header {
   margin-bottom: 24px;
+  text-align: center;
 }
 
 .stats-card-title {
@@ -2536,6 +2546,25 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   margin-top: 16px;
 }
 
+.giant-pill-badge.vtv-pill {
+  background: linear-gradient(145deg, #ffffff 0%, #fff9ec 100%);
+  border-color: rgba(212, 175, 55, 0.75);
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.22);
+  color: #721221;
+  font-weight: 800;
+}
+
+.giant-pill-badge.vtv-pill .pill-dot {
+  background: #d4af37;
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.9);
+}
+
+.giant-pill-badge.vtv-pill:hover {
+  border-color: #ffd700;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+  transform: translateY(-2px);
+}
+
 .giant-pill-badge {
   display: inline-flex;
   align-items: center;
@@ -2633,16 +2662,17 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   transform-style: preserve-3d;
 }
 
-.conveyor-track:hover {
+.conveyor-track:hover,
+.conveyor-track:active {
   animation-play-state: paused !important;
 }
 
 .row-move-left {
-  animation: marqueeLeft 56s linear infinite;
+  animation: marqueeLeft 120s linear infinite;
 }
 
 .row-move-right {
-  animation: marqueeRight 56s linear infinite;
+  animation: marqueeRight 120s linear infinite;
 }
 
 @keyframes marqueeLeft {
@@ -2758,9 +2788,37 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   background: linear-gradient(155deg, #440a13 0%, #2a0309 60%, #160104 100%);
   border: 1.5px solid rgba(220, 163, 101, 0.45);
   border-radius: 20px;
-  padding: 16px;
+  padding: 18px;
   box-shadow: 0 16px 44px rgba(45, 5, 12, 0.45), 0 0 24px rgba(220, 163, 101, 0.12);
   box-sizing: border-box;
+}
+
+.video-interlude-header {
+  text-align: center;
+  margin-bottom: 14px;
+  width: 100%;
+}
+
+.video-interlude-badge {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #ffd700;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.video-interlude-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff8f0;
+  margin: 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 .event-video-interlude .spotlight-video-wrapper {
@@ -2793,6 +2851,7 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   box-shadow: 0 18px 48px rgba(45, 5, 12, 0.45);
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -2878,9 +2937,22 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
 
 @media (max-width: 900px) {
   .event-video-interlude {
-    padding: 10px;
+    padding: 12px;
     margin: 0 auto;
     border-radius: 16px;
+  }
+
+  .video-interlude-header {
+    margin-bottom: 10px;
+  }
+
+  .video-interlude-badge {
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+  }
+
+  .video-interlude-title {
+    font-size: 1.05rem;
   }
 
   .event-video-interlude.is-portrait {
@@ -3160,6 +3232,7 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   color: #fffaf2;
   font-weight: 700;
   line-height: 1.25;
+  text-align: center;
 }
 
 /* 2 Cột: Trái 38% (Ảnh MC tách nền tràn viền) | Phải 62% (5 ảnh ghép 3 hàng) */
@@ -3555,6 +3628,37 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   aspect-ratio: 4 / 3;
   height: auto;
   min-height: 150px;
+}
+
+.mosaic-extra-grid.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.mosaic-extra-grid.cols-3 .mosaic-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  height: auto;
+  min-height: 140px;
+}
+
+@media (max-width: 900px) {
+  .mosaic-extra-grid.cols-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mosaic-extra-grid.cols-3 .mosaic-thumb:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .mosaic-extra-grid.cols-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .mosaic-extra-grid.cols-3 .mosaic-thumb:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
 }
 
 .mosaic-cluster-divider {
@@ -4843,6 +4947,261 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   transform: translateY(-2px);
 }
 
+/* Khối Lời Cảm Ơn Chân Thành & Hoành Tráng - Model to nổi bật, bỏ card nền, chữ đè nhẹ tinh tế */
+.thankyou-grand-wrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  max-width: 860px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Model đứng bên cạnh (To hơn, chân thực và nổi bật) */
+.thankyou-model-col {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 0 0 280px;
+  max-width: 310px;
+  z-index: 1;
+}
+
+.thankyou-model-glow {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 215, 120, 0.35) 0%, rgba(220, 163, 101, 0.15) 50%, transparent 75%);
+  filter: blur(24px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.thankyou-model-img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-height: 420px; /* Model to hơn nổi bật */
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.65));
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+}
+
+.thankyou-model-col:hover .thankyou-model-img {
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* Cột Chữ bên phải: Bỏ card nền, chữ tự nhiên đè nhẹ tinh tế sang trái lên model */
+.thankyou-content-col {
+  flex: 1;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 0 20px;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  position: relative;
+  z-index: 3;
+  margin-left: -32px; /* Chữ đè nhẹ tinh tế lên mép áo của model */
+}
+
+.thankyou-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #ffd782;
+  background: linear-gradient(135deg, rgba(220, 163, 101, 0.3) 0%, rgba(255, 215, 120, 0.15) 100%);
+  border: 1px solid rgba(255, 215, 120, 0.55);
+  padding: 4px 14px;
+  border-radius: 30px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.thankyou-badge .thankyou-sparkle {
+  color: #ffd782;
+  font-size: 0.72rem;
+  animation: sparkleTwinkle 2.5s ease-in-out infinite alternate;
+}
+
+.thankyou-headline {
+  font-family: var(--font-script, 'Great Vibes', cursive);
+  font-size: clamp(2.3rem, 3.8vw, 3.2rem);
+  color: #ffd782;
+  margin: 0 0 6px;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.8), 0 1px 4px rgba(0, 0, 0, 0.9);
+  line-height: 1.05;
+  font-weight: 400;
+}
+
+.thankyou-gold-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 12px;
+}
+
+.thankyou-gold-line .gl-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(220, 163, 101, 0.6), transparent);
+}
+
+.thankyou-gold-line .gl-star {
+  color: #ffd782;
+  font-size: 0.72rem;
+}
+
+.thankyou-message {
+  font-size: clamp(0.92rem, 1.3vw, 1.02rem);
+  line-height: 1.68;
+  color: #fff9f0;
+  margin-bottom: 14px;
+  font-weight: 400;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.95);
+  max-width: 520px;
+}
+
+.thankyou-author {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(220, 163, 101, 0.4);
+  width: 100%;
+  max-width: 260px;
+}
+
+.thankyou-author .author-note {
+  font-size: 0.78rem;
+  color: rgba(255, 240, 230, 0.85);
+  letter-spacing: 0.4px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.thankyou-author .author-name {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffd782;
+  letter-spacing: 0.4px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+/* Mobile & Tablet: Model to rõ, đứng cạnh chữ, đè nhẹ tinh tế, không có card nền */
+@media (max-width: 680px) {
+  .cta-luxury-card {
+    padding: 20px 10px 16px !important;
+  }
+
+  .thankyou-grand-wrapper {
+    flex-direction: row;
+    align-items: flex-end;
+    width: 100%;
+  }
+
+  .thankyou-model-col {
+    flex: 0 0 155px; /* Model to hơn trên mobile */
+    max-width: 175px;
+  }
+
+  .thankyou-model-glow {
+    width: 140px;
+    height: 140px;
+    bottom: 4%;
+  }
+
+  .thankyou-model-img {
+    max-height: 285px; /* Model cao to rõ nét */
+  }
+
+  .thankyou-content-col {
+    padding: 8px 0 10px;
+    margin-left: -22px; /* Chữ đè nhẹ tinh tế lên model */
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .thankyou-badge {
+    font-size: 0.68rem;
+    padding: 2px 8px;
+    margin-bottom: 4px;
+  }
+
+  .thankyou-headline {
+    font-size: 1.75rem;
+    margin: 0 0 4px;
+  }
+
+  .thankyou-gold-line {
+    margin-bottom: 6px;
+    max-width: 200px;
+  }
+
+  .thankyou-message {
+    font-size: 0.8rem;
+    line-height: 1.48;
+    margin-bottom: 8px;
+  }
+
+  .thankyou-author {
+    padding-top: 6px;
+  }
+
+  .thankyou-author .author-note {
+    font-size: 0.68rem;
+  }
+
+  .thankyou-author .author-name {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .thankyou-model-col {
+    flex: 0 0 135px;
+    max-width: 150px;
+  }
+
+  .thankyou-model-img {
+    max-height: 250px;
+  }
+
+  .thankyou-content-col {
+    margin-left: -18px;
+  }
+
+  .thankyou-headline {
+    font-size: 1.55rem;
+  }
+
+  .thankyou-message {
+    font-size: 0.74rem;
+  }
+}
+
 /* FOOTER */
 .site-footer {
   background: #1c120c;
@@ -5528,11 +5887,11 @@ body.guide-mode-active [data-placeholder]::before {
   }
 
   .row-move-left {
-    animation-duration: 30s;
+    animation-duration: 95s;
   }
 
   .row-move-right {
-    animation-duration: 32s;
+    animation-duration: 95s;
   }
 
   /* SECTION 6: FEATURED EVENT SHOWCASE ON MOBILE */
@@ -6846,13 +7205,14 @@ body.curtain-revealed #hero .hero-sparkles-wrap,
 
 /* Post Title */
 .insta-post-title {
-  margin: 0 0 14px 0 !important;
+  margin: 0 auto 14px auto !important;
   font-family: var(--font-heading, 'Playfair Display', serif);
   font-size: clamp(1.22rem, 1.55vw, 1.45rem) !important;
   line-height: 1.35 !important;
   color: #fcebd2 !important;
-  text-align: left;
+  text-align: center !important;
   letter-spacing: 0.2px;
+  width: 100%;
 }
 
 /* Instagram Carousel Outer Box */
@@ -7724,8 +8084,8 @@ body.curtain-revealed #hero .hero-sparkles-wrap,
 }
 
 .vp-head {
-  text-align: left;
-  margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 24px;
 }
 
 .vp-eyebrow {
