@@ -2644,6 +2644,16 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   background: linear-gradient(to left, #1c0206 20%, rgba(28, 2, 6, 0) 100%);
 }
 
+.brand-conveyor-container {
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.brand-conveyor-container.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
 .conveyor-row-wrapper {
   overflow: visible;
   width: 100%;
@@ -2651,6 +2661,7 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   padding: 20px 0;
   position: relative;
   transform-style: preserve-3d;
+  touch-action: pan-y;
 }
 
 .conveyor-track {
@@ -3233,6 +3244,10 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   font-weight: 700;
   line-height: 1.25;
   text-align: center;
+}
+
+.brand-nowrap {
+  white-space: nowrap !important;
 }
 
 /* 2 Cột: Trái 38% (Ảnh MC tách nền tràn viền) | Phải 62% (5 ảnh ghép 3 hàng) */
@@ -6427,6 +6442,7 @@ body.guide-mode-active [data-placeholder]::before {
 .reveal-on-scroll.is-revealed {
   opacity: 1;
   transform: translateY(0);
+  will-change: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {

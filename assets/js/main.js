@@ -734,41 +734,138 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================================================
-  // 17. PARTNERS CONVEYOR - TRIANGULAR CENTER SPOTLIGHT (HIỆU ỨNG ĐỈNH TAM GIÁC)
-  // Khi logo chạy đến giữa màn hình sẽ to nổi lên (scale 1.35x, nâng cao, phát sáng)
-  // và thoải dần về 2 bên mép (scale 0.88x, mờ dần)
+  // 17. PARTNERS CONVEYOR - TRIANGULAR CENTER SPOTLIGHT & TOUCH/DRAG SWIPE
+  // Tự động trôi mượt mà (marquee), đồng thời hỗ trợ CHẠM VUỐT TRÁI/PHẢI 1:1 trên Mobile
+  // Hiệu ứng Đỉnh Tam Giác 3D Xoay Vòng cập nhật thời gian thực khi vuốt.
   // ==========================================================================
   function initTriangularBrandConveyor() {
     const container = document.querySelector('.brand-conveyor-container');
     if (!container) return;
 
+    const track = container.querySelector('.conveyor-track');
     const cards = container.querySelectorAll('.brand-item-card');
-    if (!cards.length) return;
+    if (!track || !cards.length) return;
 
-    // Hỗ trợ chạm giữ trên mobile để dừng xem kỹ, buông tay tiếp tục chạy
-    const tracks = container.querySelectorAll('.conveyor-track');
-    tracks.forEach(track => {
-      track.addEventListener('touchstart', () => {
-        track.style.animationPlayState = 'paused';
-      }, { passive: true });
-      track.addEventListener('touchend', () => {
-        track.style.animationPlayState = 'running';
-      }, { passive: true });
-      track.addEventListener('touchcancel', () => {
-        track.style.animationPlayState = 'running';
-      }, { passive: true });
-    });
+    // Tắt CSS animation để JS điều khiển vị trí trực tiếp, hỗ trợ vuốt mượt mà 60fps
+    track.style.animation = 'none';
 
     let isVisible = false;
     let rafId = null;
+    let currentX = 0;
+    let lastTimestamp = performance.now();
 
-    // Chỉ chạy loop khi section nằm trong viewport (0% CPU khi không nhìn tới)
+    // Tốc độ trôi tự động: ~48px/s trên mobile, ~38px/s trên desktop (hướng sang trái)
+    const getBaseSpeed = () => (window.innerWidth <= 600 ? -48 : -38);
+    let autoSpeed = getBaseSpeed();
+    let inertiaSpeed = 0; // Trớn lướt sau khi buông tay
+
+    // Trạng thái Touch / Drag
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let dragStartX = 0;
+    let lastTouchX = 0;
+    let lastTouchTime = 0;
+    let dragDirection = null; // 'horizontal' | 'vertical' | null
+    let isHovered = false;
+
+    // Hover trên desktop thì tạm dừng trôi tự động
+    container.addEventListener('mouseenter', () => { isHovered = true; });
+    container.addEventListener('mouseleave', () => { isHovered = false; });
+
+    // Touch handlers trên Mobile
+    const onTouchStart = (e) => {
+      const touch = e.touches ? e.touches[0] : e;
+      isDragging = true;
+      dragDirection = null;
+      startX = touch.clientX;
+      startY = touch.clientY;
+      dragStartX = currentX;
+      lastTouchX = touch.clientX;
+      lastTouchTime = performance.now();
+      inertiaSpeed = 0;
+      container.classList.add('is-dragging');
+    };
+
+    const onTouchMove = (e) => {
+      if (!isDragging) return;
+      const touch = e.touches ? e.touches[0] : e;
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
+
+      // Nhận diện hướng vuốt sớm (sau 6px di chuyển)
+      if (dragDirection === null) {
+        if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
+          if (Math.abs(dx) >= Math.abs(dy)) {
+            dragDirection = 'horizontal';
+          } else {
+            // Khách đang cuộn dọc trang web -> hủy drag để trang cuộn tự nhiên
+            dragDirection = 'vertical';
+            isDragging = false;
+            container.classList.remove('is-dragging');
+            return;
+          }
+        } else {
+          return;
+        }
+      }
+
+      if (dragDirection === 'horizontal') {
+        // Khách đang vuốt ngang băng chuyền -> chặn cuộn dọc trang để trải nghiệm vuốt trơn tru
+        if (e.cancelable) e.preventDefault();
+
+        currentX = dragStartX + dx;
+
+        const now = performance.now();
+        const dt = now - lastTouchTime;
+        if (dt > 8) {
+          inertiaSpeed = ((touch.clientX - lastTouchX) / dt) * 1000; // px/giây
+          lastTouchX = touch.clientX;
+          lastTouchTime = now;
+        }
+      }
+    };
+
+    const onTouchEnd = () => {
+      if (!isDragging && dragDirection !== 'horizontal') return;
+      isDragging = false;
+      dragDirection = null;
+      container.classList.remove('is-dragging');
+
+      // Giới hạn vận tốc trớn tối đa
+      const maxInertia = 1600;
+      if (inertiaSpeed > maxInertia) inertiaSpeed = maxInertia;
+      if (inertiaSpeed < -maxInertia) inertiaSpeed = -maxInertia;
+    };
+
+    // Đăng ký Touch listeners
+    container.addEventListener('touchstart', onTouchStart, { passive: true });
+    container.addEventListener('touchmove', onTouchMove, { passive: false });
+    container.addEventListener('touchend', onTouchEnd, { passive: true });
+    container.addEventListener('touchcancel', onTouchEnd, { passive: true });
+
+    // Hỗ trợ chuột kéo thả trên Desktop (Mouse drag)
+    container.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      onTouchStart(e);
+      const onMouseMove = (ev) => onTouchMove(ev);
+      const onMouseUp = () => {
+        onTouchEnd();
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+      };
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+    });
+
+    // Chỉ chạy loop khi section nằm trong viewport (tiết kiệm CPU/GPU)
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           isVisible = entry.isIntersecting;
           if (isVisible) {
-            if (!rafId) rafId = requestAnimationFrame(updateSpotlight);
+            lastTimestamp = performance.now();
+            if (!rafId) rafId = requestAnimationFrame(updateLoop);
           } else {
             if (rafId) {
               cancelAnimationFrame(rafId);
@@ -781,15 +878,50 @@ document.addEventListener('DOMContentLoaded', () => {
       observer.observe(container);
     } else {
       isVisible = true;
-      rafId = requestAnimationFrame(updateSpotlight);
+      rafId = requestAnimationFrame(updateLoop);
     }
 
-    function updateSpotlight() {
+    function updateLoop(now) {
       if (!isVisible) {
         rafId = null;
         return;
       }
 
+      const dt = Math.min((now - lastTimestamp) / 1000, 0.1);
+      lastTimestamp = now;
+
+      const halfWidth = track.scrollWidth / 2;
+
+      if (!isDragging) {
+        if (Math.abs(inertiaSpeed) > 15) {
+          // Trớn lướt mượt mà sau khi thả tay
+          currentX += inertiaSpeed * dt;
+          inertiaSpeed *= Math.pow(0.06, dt);
+        } else {
+          inertiaSpeed = 0;
+          if (!isHovered) {
+            autoSpeed = getBaseSpeed();
+            currentX += autoSpeed * dt;
+          }
+        }
+      }
+
+      // Xoay vòng vô tận (Infinite wrap-around) cả 2 chiều trái & phải
+      if (halfWidth > 0) {
+        while (currentX <= -halfWidth) currentX += halfWidth;
+        while (currentX > 0) currentX -= halfWidth;
+      }
+
+      // Cập nhật vị trí băng chuyền
+      track.style.transform = `translate3d(${currentX.toFixed(2)}px, 0, 0)`;
+
+      // Tính toán hiệu ứng Đỉnh Tam Giác 3D cho các thẻ đang nằm trong tầm mắt
+      updateSpotlight();
+
+      rafId = requestAnimationFrame(updateLoop);
+    }
+
+    function updateSpotlight() {
       const containerRect = container.getBoundingClientRect();
       const centerX = containerRect.left + containerRect.width / 2;
       const isMobile = window.innerWidth <= 600;
@@ -802,12 +934,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const maxScale = isMobile ? 1.34 : 1.45;
       const scaleDelta = maxScale - minScale;
 
-      const apexLift = isMobile ? -24 : -36;   // Đỉnh tam giác nhô cao vượt trội
-      const baseDrop = isMobile ? 10 : 14;     // Hai cạnh đáy tam giác hạ thấp xuống
+      const apexLift = isMobile ? -24 : -36;
+      const baseDrop = isMobile ? 10 : 14;
 
-      const maxRotateY = isMobile ? 22 : 26;   // Góc xoay 3D nghiêng về tâm (xoay vòng)
-      const maxRotateZ = isMobile ? 2.8 : 3.5; // Góc dốc mái tam giác
-      const maxTranslateZ = isMobile ? 55 : 80; // Độ nổi 3D tiến về phía người xem
+      const maxRotateY = isMobile ? 22 : 26;
+      const maxRotateZ = isMobile ? 2.8 : 3.5;
+      const maxTranslateZ = isMobile ? 55 : 80;
 
       for (let i = 0; i < cards.length; i++) {
         const card = cards[i];
@@ -830,16 +962,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const dist = Math.abs(signedDist);
 
         if (dist < maxDist) {
-          // Hàm cosinus tạo đường cong tam giác dốc rõ rệt (1 ở đỉnh tâm, 0 ở chân 2 bên)
+          // Hàm cosinus tạo đường cong tam giác dốc rõ rệt
           const norm = dist / maxDist;
           const peak = Math.cos(norm * (Math.PI / 2));
-          const peakCurve = Math.pow(peak, 1.35); // Đỉnh nhọn và nổi bật rõ rệt
+          const peakCurve = Math.pow(peak, 1.35);
 
           const scale = minScale + scaleDelta * peakCurve;
           const translateY = (apexLift * peakCurve) + (baseDrop * (1 - peakCurve));
           const translateZ = (maxTranslateZ * peakCurve) - (25 * (1 - peakCurve));
 
-          // Hướng xoay 3D: bên trái nghiêng hướng vào tâm, bên phải nghiêng hướng vào tâm
           const dir = signedDist < 0 ? 1 : -1;
           const rotateY = (1 - peak) * maxRotateY * dir;
           const rotateZ = (1 - peak) * maxRotateZ * (-dir);
@@ -875,8 +1006,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       }
-
-      rafId = requestAnimationFrame(updateSpotlight);
     }
   }
 
