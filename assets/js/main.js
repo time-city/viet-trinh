@@ -667,6 +667,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const obs = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
+              // Tạm dừng TẤT CẢ các video khác để không bao giờ chạy 2 video song song trong GPU
+              wrappers.forEach(otherWrap => {
+                if (otherWrap !== wrap) {
+                  const otherVid = otherWrap.querySelector('video');
+                  if (otherVid && !otherVid.paused) {
+                    otherVid.pause();
+                    otherWrap.classList.remove('is-playing');
+                  }
+                }
+              });
+
               const playPromise = video.play();
               if (playPromise !== undefined) {
                 playPromise.then(() => {
@@ -858,12 +869,34 @@ document.addEventListener('DOMContentLoaded', () => {
       window.addEventListener('mouseup', onMouseUp);
     });
 
+    // Tối ưu hiệu năng 60fps tuyệt đối: Cache kích thước & vị trí gốc của các card
+    // Loại bỏ hoàn toàn getBoundingClientRect() bên trong vòng lặp 60fps (chống giật lag & crash Safari/Messenger)
+    let containerWidth = container.offsetWidth || window.innerWidth;
+    let halfWidth = track.scrollWidth ? track.scrollWidth / 2 : 2400;
+    let isMobile = window.innerWidth <= 600;
+    let cardCenters = [];
+
+    function measureLayout() {
+      containerWidth = container.offsetWidth || window.innerWidth;
+      halfWidth = track.scrollWidth ? track.scrollWidth / 2 : 2400;
+      isMobile = window.innerWidth <= 600;
+      cardCenters = [];
+      for (let i = 0; i < cards.length; i++) {
+        cardCenters.push(cards[i].offsetLeft + cards[i].offsetWidth / 2);
+      }
+    }
+
+    // Đo đạc một lần duy nhất khi khởi tạo & khi xoay màn hình/resize
+    measureLayout();
+    window.addEventListener('resize', measureLayout, { passive: true });
+
     // Chỉ chạy loop khi section nằm trong viewport (tiết kiệm CPU/GPU)
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           isVisible = entry.isIntersecting;
           if (isVisible) {
+            if (cardCenters.length === 0 || cardCenters[0] === 0) measureLayout();
             lastTimestamp = performance.now();
             if (!rafId) rafId = requestAnimationFrame(updateLoop);
           } else {
@@ -890,8 +923,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const dt = Math.min((now - lastTimestamp) / 1000, 0.1);
       lastTimestamp = now;
 
-      const halfWidth = track.scrollWidth / 2;
-
       if (!isDragging) {
         if (Math.abs(inertiaSpeed) > 15) {
           // Trớn lướt mượt mà sau khi thả tay
@@ -915,19 +946,15 @@ document.addEventListener('DOMContentLoaded', () => {
       // Cập nhật vị trí băng chuyền
       track.style.transform = `translate3d(${currentX.toFixed(2)}px, 0, 0)`;
 
-      // Tính toán hiệu ứng Đỉnh Tam Giác 3D cho các thẻ đang nằm trong tầm mắt
+      // Tính toán hiệu ứng Đỉnh Tam Giác 3D cho các thẻ đang nằm trong tầm mắt (0% reflow)
       updateSpotlight();
 
       rafId = requestAnimationFrame(updateLoop);
     }
 
     function updateSpotlight() {
-      const containerRect = container.getBoundingClientRect();
-      const centerX = containerRect.left + containerRect.width / 2;
-      const isMobile = window.innerWidth <= 600;
-
-      // Phạm vi vùng tam giác: khoảng 42% - 46% bề rộng container
-      const maxDist = Math.max(containerRect.width * (isMobile ? 0.46 : 0.42), 160);
+      const centerX = containerWidth / 2;
+      const maxDist = Math.max(containerWidth * (isMobile ? 0.46 : 0.42), 160);
 
       // Tham số đỉnh tam giác & 3D xoay vòng
       const minScale = isMobile ? 0.72 : 0.76;
@@ -943,10 +970,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       for (let i = 0; i < cards.length; i++) {
         const card = cards[i];
-        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardCenters[i] || (i * 140);
+        // Tọa độ tâm card tính bằng số học thuần túy (KHÔNG đọc DOM reflow)
+        const cardCenterX = currentX + cardCenter;
 
         // Bỏ qua các card nằm ngoài màn hình để tối ưu 60fps tuyệt đối
-        if (cardRect.right < containerRect.left - 50 || cardRect.left > containerRect.right + 50) {
+        if (cardCenterX < -100 || cardCenterX > containerWidth + 100) {
           if (card._activeSpotlight) {
             card.style.transform = '';
             card.style.opacity = '';
@@ -957,7 +986,6 @@ document.addEventListener('DOMContentLoaded', () => {
           continue;
         }
 
-        const cardCenterX = cardRect.left + cardRect.width / 2;
         const signedDist = cardCenterX - centerX;
         const dist = Math.abs(signedDist);
 
