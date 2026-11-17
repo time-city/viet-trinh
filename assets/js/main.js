@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
     statsObserver.observe(statsContainer);
   }
 
-  // 10. General Scroll Reveal (Xuất hiện 1 lần ổn định, loại bỏ hoàn toàn giật nảy)
+  // 10. General Scroll Reveal (Chỉ hiện 1 lần duy nhất, loại bỏ hoàn toàn fade out và animation lặp lại)
   const revealElements = document.querySelectorAll('.reveal-on-scroll');
   if (revealElements.length > 0) {
     const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -286,11 +286,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -40px 0px'
+      threshold: 0.01,
+      rootMargin: '250px 0px 250px 0px'
     });
 
-    revealElements.forEach(el => revealObserver.observe(el));
+    revealElements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 250) {
+        el.classList.add('in-view', 'is-revealed');
+      } else {
+        revealObserver.observe(el);
+      }
+    });
   }
 
   // 11. Intro Quote & Signature Fade-in khi mở cửa / cuộn tới
