@@ -659,47 +659,43 @@ document.addEventListener('DOMContentLoaded', () => {
       video.addEventListener('pause', () => wrap.classList.remove('is-playing'));
       video.addEventListener('ended', () => {
         video.currentTime = 0;
-        video.play().catch(() => {});
+        wrap.classList.remove('is-playing');
       });
 
-      // IntersectionObserver: Tự động play khi cuộn vào tầm mắt, tạm dừng khi cuộn ra ngoài
-      if ('IntersectionObserver' in window) {
-        const obs = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              // Tạm dừng TẤT CẢ các video khác để không bao giờ chạy 2 video song song trong GPU
-              wrappers.forEach(otherWrap => {
-                if (otherWrap !== wrap) {
-                  const otherVid = otherWrap.querySelector('video');
-                  if (otherVid && !otherVid.paused) {
-                    otherVid.pause();
-                    otherWrap.classList.remove('is-playing');
-                  }
-                }
-              });
-
-              const playPromise = video.play();
-              if (playPromise !== undefined) {
-                playPromise.then(() => {
-                  wrap.classList.add('is-playing');
-                }).catch(() => {
-                  // Dự phòng nếu trình duyệt đòi hỏi mute chặt chẽ
-                  video.muted = true;
-                  video.play().catch(() => {});
-                });
-              }
-            } else {
-              if (!video.paused) {
-                video.pause();
-                wrap.classList.remove('is-playing');
+      // Tương tác chạm phát/dừng video (Tap to play) - KHÔNG tự động play khi cuộn để chống sập RAM Messenger/iPhone
+      const toggleVideo = (e) => {
+        if (e.target.closest('.spotlight-sound-toggle')) return;
+        if (video.paused) {
+          // Tạm dừng TẤT CẢ các video khác để không bao giờ chạy 2 video song song
+          wrappers.forEach(otherWrap => {
+            if (otherWrap !== wrap) {
+              const otherVid = otherWrap.querySelector('video');
+              if (otherVid && !otherVid.paused) {
+                otherVid.pause();
+                otherWrap.classList.remove('is-playing');
               }
             }
           });
-        }, { threshold: 0.25 });
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      };
+
+      wrap.addEventListener('click', toggleVideo);
+
+      // Khi video đang phát mà người dùng cuộn ra xa khỏi màn hình -> tự động dừng để tiết kiệm pin & RAM
+      if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting && !video.paused) {
+              video.pause();
+              wrap.classList.remove('is-playing');
+            }
+          });
+        }, { threshold: 0.1 });
 
         obs.observe(wrap);
-      } else {
-        video.play().catch(() => {});
       }
     });
   }
@@ -937,16 +933,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Xoay vòng vô tận (Infinite wrap-around) cả 2 chiều trái & phải
+      // Xoay vòng vô tận (Infinite wrap-around) cả 2 chiều trái & phải - Modulo an toàn 100%
       if (halfWidth > 0) {
-        while (currentX <= -halfWidth) currentX += halfWidth;
-        while (currentX > 0) currentX -= halfWidth;
+        currentX = currentX % halfWidth;
+        if (currentX > 0) currentX -= halfWidth;
       }
 
       // Cập nhật vị trí băng chuyền
       track.style.transform = `translate3d(${currentX.toFixed(2)}px, 0, 0)`;
 
-      // Tính toán hiệu ứng Đỉnh Tam Giác 3D cho các thẻ đang nằm trong tầm mắt (0% reflow)
+      // Tính toán hiệu ứng Đỉnh Tam Giác cho các thẻ đang nằm trong tầm mắt (Chuẩn 2D mượt 60fps, 0% crash)
       updateSpotlight();
 
       rafId = requestAnimationFrame(updateLoop);
@@ -956,22 +952,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const centerX = containerWidth / 2;
       const maxDist = Math.max(containerWidth * (isMobile ? 0.46 : 0.42), 160);
 
-      // Tham số đỉnh tam giác & 3D xoay vòng
-      const minScale = isMobile ? 0.72 : 0.76;
-      const maxScale = isMobile ? 1.34 : 1.45;
+      const minScale = isMobile ? 0.82 : 0.85;
+      const maxScale = isMobile ? 1.25 : 1.35;
       const scaleDelta = maxScale - minScale;
-
-      const apexLift = isMobile ? -24 : -36;
-      const baseDrop = isMobile ? 10 : 14;
-
-      const maxRotateY = isMobile ? 22 : 26;
-      const maxRotateZ = isMobile ? 2.8 : 3.5;
-      const maxTranslateZ = isMobile ? 55 : 80;
+      const apexLift = isMobile ? -14 : -20;
 
       for (let i = 0; i < cards.length; i++) {
         const card = cards[i];
         const cardCenter = cardCenters[i] || (i * 140);
-        // Tọa độ tâm card tính bằng số học thuần túy (KHÔNG đọc DOM reflow)
         const cardCenterX = currentX + cardCenter;
 
         // Bỏ qua các card nằm ngoài màn hình để tối ưu 60fps tuyệt đối
@@ -996,17 +984,12 @@ document.addEventListener('DOMContentLoaded', () => {
           const peakCurve = Math.pow(peak, 1.35);
 
           const scale = minScale + scaleDelta * peakCurve;
-          const translateY = (apexLift * peakCurve) + (baseDrop * (1 - peakCurve));
-          const translateZ = (maxTranslateZ * peakCurve) - (25 * (1 - peakCurve));
+          const translateY = apexLift * peakCurve;
+          const opacity = 0.65 + 0.35 * peak;
+          const zIndex = Math.round(2 + peakCurve * 20);
 
-          const dir = signedDist < 0 ? 1 : -1;
-          const rotateY = (1 - peak) * maxRotateY * dir;
-          const rotateZ = (1 - peak) * maxRotateZ * (-dir);
-
-          const opacity = 0.55 + 0.45 * peak;
-          const zIndex = Math.round(2 + peakCurve * 28);
-
-          card.style.transform = `perspective(1000px) translateY(${translateY.toFixed(1)}px) translateZ(${translateZ.toFixed(1)}px) rotateY(${rotateY.toFixed(1)}deg) rotateZ(${rotateZ.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
+          // 2D Transform nhẹ nhàng và ổn định tuyệt đối (không perspective/3D Metal crash)
+          card.style.transform = `translateY(${translateY.toFixed(1)}px) scale(${scale.toFixed(3)})`;
           card.style.opacity = opacity.toFixed(2);
           card.style.zIndex = zIndex.toString();
 
@@ -1023,11 +1006,8 @@ document.addEventListener('DOMContentLoaded', () => {
           card._activeSpotlight = true;
         } else {
           if (card._activeSpotlight) {
-            const dir = signedDist < 0 ? 1 : -1;
-            const rotateY = maxRotateY * dir;
-            const rotateZ = maxRotateZ * (-dir);
-            card.style.transform = `perspective(1000px) translateY(${baseDrop}px) translateZ(-25px) rotateY(${rotateY.toFixed(1)}deg) rotateZ(${rotateZ.toFixed(1)}deg) scale(${minScale})`;
-            card.style.opacity = '0.50';
+            card.style.transform = `scale(${minScale})`;
+            card.style.opacity = '0.55';
             card.style.zIndex = '1';
             card.classList.remove('is-spotlight-peak');
             card._activeSpotlight = false;

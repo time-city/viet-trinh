@@ -2660,7 +2660,6 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   margin: 0 auto;
   padding: 20px 0;
   position: relative;
-  transform-style: preserve-3d;
   touch-action: pan-y;
 }
 
@@ -2668,9 +2667,7 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   display: flex;
   gap: 22px;
   width: max-content;
-  will-change: transform;
   user-select: none;
-  transform-style: preserve-3d;
 }
 
 .conveyor-track:hover,
@@ -2706,7 +2703,7 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   }
 }
 
-/* Thẻ Brand Item Card - Thiết kế sang trọng, sắc nét */
+/* Thẻ Brand Item Card - Thiết kế sang trọng, sắc nét (Chuẩn 2D ổn định tuyệt đối trên Mobile) */
 .brand-item-card {
   position: relative;
   flex-shrink: 0;
@@ -2722,9 +2719,6 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   padding: 10px 14px;
   cursor: pointer;
   transform-origin: center center;
-  will-change: transform, opacity;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -2841,6 +2835,67 @@ body.curtain-locked .intro-quote-box .quote-author-sign {
   background: #0d0103;
   border: 1px solid rgba(220, 163, 101, 0.35);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+
+/* Nút bấm Phát Video chuẩn Tap-to-play siêu nhẹ, không ngốn GPU */
+.spotlight-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(13, 1, 3, 0.38);
+  cursor: pointer;
+  z-index: 5;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  pointer-events: auto;
+}
+
+.spotlight-video-wrapper.is-playing .spotlight-play-overlay {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.spotlight-play-btn {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #dca365 0%, #a25c23 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 24px rgba(220, 163, 101, 0.55);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.spotlight-play-overlay:hover .spotlight-play-btn {
+  transform: scale(1.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 32px rgba(220, 163, 101, 0.75);
+}
+
+.spotlight-play-btn svg {
+  width: 28px;
+  height: 28px;
+  margin-left: 3px;
+  fill: currentColor;
+}
+
+.spotlight-play-text {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #fff8f0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  background: rgba(13, 1, 3, 0.65);
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(220, 163, 101, 0.4);
 }
 
 .event-video-interlude .spotlight-video-wrapper video {
@@ -8855,6 +8910,14 @@ body.curtain-revealed #hero .hero-sparkles-wrap,
   .dust-s {
     animation: none !important;
     display: none !important;
+  }
+}
+
+/* Tối ưu ổn định chống tràn bộ nhớ / trắng màn hình trên iPhone & Messenger */
+@media (max-width: 768px) {
+  * {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
   }
 }
 
