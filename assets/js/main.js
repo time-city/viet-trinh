@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
         });
-      }, { threshold: 0.3 });
+      }, { threshold: 0.15, rootMargin: '60px 0px 60px 0px' });
       videoCardObserver.observe(card);
     }
   }
@@ -729,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             }
           });
-        }, { threshold: 0.25 });
+        }, { threshold: 0.15, rootMargin: '60px 0px 60px 0px' });
 
         obs.observe(wrap);
       } else {
