@@ -440,175 +440,175 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   // 14. VIDEO PLAYLIST PORTFOLIO (Chuẩn Video HTML5, Nút Play/Pause ở giữa video)
   // ==========================================================================
-  function initVideoPlaylist() {
-    const card = document.querySelector('[data-video-playlist]');
-    if (!card) return;
+  // function initVideoPlaylist() {
+  //   const card = document.querySelector('[data-video-playlist]');
+  //   if (!card) return;
 
-    const stage = card.querySelector('.vp-stage');
-    const video = card.querySelector('.vp-video');
-    const centerBtn = stage ? stage.querySelector('.vp-center-btn') : null;
-    const backdrop = card.querySelector('.vp-backdrop');
-    const titleEl = card.querySelector('.vp-now-title');
-    const items = card.querySelectorAll('.vp-item');
+  //   const stage = card.querySelector('.vp-stage');
+  //   const video = card.querySelector('.vp-video');
+  //   const centerBtn = stage ? stage.querySelector('.vp-center-btn') : null;
+  //   const backdrop = card.querySelector('.vp-backdrop');
+  //   const titleEl = card.querySelector('.vp-now-title');
+  //   const items = card.querySelectorAll('.vp-item');
 
-    let currentIndex = 0;
-    let controlsTimer = null;
+  //   let currentIndex = 0;
+  //   let controlsTimer = null;
 
-    function showControlsBriefly() {
-      if (!stage) return;
-      stage.classList.add('show-controls');
-      clearTimeout(controlsTimer);
-      controlsTimer = setTimeout(() => {
-        if (video && !video.paused) {
-          stage.classList.remove('show-controls');
-        }
-      }, 2200);
-    }
+  //   function showControlsBriefly() {
+  //     if (!stage) return;
+  //     stage.classList.add('show-controls');
+  //     clearTimeout(controlsTimer);
+  //     controlsTimer = setTimeout(() => {
+  //       if (video && !video.paused) {
+  //         stage.classList.remove('show-controls');
+  //       }
+  //     }, 2200);
+  //   }
 
-    function togglePlayPause() {
-      if (!video) return;
-      if (video.paused) {
-        video.play().catch(err => {
-          console.warn('Playback error:', err);
-          if (stage) {
-            stage.classList.remove('is-playing');
-            stage.classList.add('is-paused');
-          }
-        });
-      } else {
-        video.pause();
-      }
-    }
+  //   function togglePlayPause() {
+  //     if (!video) return;
+  //     if (video.paused) {
+  //       video.play().catch(err => {
+  //         console.warn('Playback error:', err);
+  //         if (stage) {
+  //           stage.classList.remove('is-playing');
+  //           stage.classList.add('is-paused');
+  //         }
+  //       });
+  //     } else {
+  //       video.pause();
+  //     }
+  //   }
 
-    // Tương tác nút Play / Pause ở giữa màn hình video
-    if (centerBtn) {
-      centerBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        togglePlayPause();
-      });
-    }
+  //   // Tương tác nút Play / Pause ở giữa màn hình video
+  //   if (centerBtn) {
+  //     centerBtn.addEventListener('click', (e) => {
+  //       e.preventDefault();
+  //       e.stopPropagation();
+  //       togglePlayPause();
+  //     });
+  //   }
 
-    // Hiện nút điều khiển khi tương tác chuột hoặc chạm trên video
-    if (stage) {
-      stage.addEventListener('mousemove', () => {
-        if (video && !video.paused) {
-          showControlsBriefly();
-        }
-      });
+  //   // Hiện nút điều khiển khi tương tác chuột hoặc chạm trên video
+  //   if (stage) {
+  //     stage.addEventListener('mousemove', () => {
+  //       if (video && !video.paused) {
+  //         showControlsBriefly();
+  //       }
+  //     });
 
-      stage.addEventListener('pointerdown', (e) => {
-        if (e.target.closest('.vp-center-btn') || e.target.closest('.vp-list')) return;
-        if (video && !video.paused) {
-          showControlsBriefly();
-        }
-      });
-    }
+  //     stage.addEventListener('pointerdown', (e) => {
+  //       if (e.target.closest('.vp-center-btn') || e.target.closest('.vp-list')) return;
+  //       if (video && !video.paused) {
+  //         showControlsBriefly();
+  //       }
+  //     });
+  //   }
 
-    function switchVideo(index, autoPlay = true) {
-      if (index < 0 || index >= items.length) return;
-      currentIndex = index;
+  //   function switchVideo(index, autoPlay = true) {
+  //     if (index < 0 || index >= items.length) return;
+  //     currentIndex = index;
 
-      items.forEach((item, idx) => {
-        item.classList.toggle('is-active', idx === currentIndex);
-      });
+  //     items.forEach((item, idx) => {
+  //       item.classList.toggle('is-active', idx === currentIndex);
+  //     });
 
-      const activeItem = items[currentIndex];
-      const src = activeItem.dataset.src;
-      const poster = activeItem.dataset.poster;
-      const title = activeItem.dataset.title;
-      const orientation = activeItem.dataset.orientation || 'portrait';
+  //     const activeItem = items[currentIndex];
+  //     const src = activeItem.dataset.src;
+  //     const poster = activeItem.dataset.poster;
+  //     const title = activeItem.dataset.title;
+  //     const orientation = activeItem.dataset.orientation || 'portrait';
 
-      // Chuyển orientation ngay lập tức để tỷ lệ stage co giãn mượt mà
-      stage.classList.remove('is-portrait', 'is-landscape');
-      stage.classList.add(`is-${orientation}`);
+  //     // Chuyển orientation ngay lập tức để tỷ lệ stage co giãn mượt mà
+  //     stage.classList.remove('is-portrait', 'is-landscape');
+  //     stage.classList.add(`is-${orientation}`);
 
-      if (titleEl) titleEl.textContent = title;
-      if (backdrop) backdrop.style.backgroundImage = `url('${poster}')`;
-      video.poster = poster;
-      video.src = src;
-      video.load();
+  //     if (titleEl) titleEl.textContent = title;
+  //     if (backdrop) backdrop.style.backgroundImage = `url('${poster}')`;
+  //     video.poster = poster;
+  //     video.src = src;
+  //     video.load();
 
-      // Kiểm tra chính xác tỷ lệ video sau khi load metadata
-      video.addEventListener('loadedmetadata', () => {
-        const isPort = video.videoHeight > video.videoWidth;
-        stage.classList.toggle('is-portrait', isPort);
-        stage.classList.toggle('is-landscape', !isPort);
-      }, { once: true });
+  //     // Kiểm tra chính xác tỷ lệ video sau khi load metadata
+  //     video.addEventListener('loadedmetadata', () => {
+  //       const isPort = video.videoHeight > video.videoWidth;
+  //       stage.classList.toggle('is-portrait', isPort);
+  //       stage.classList.toggle('is-landscape', !isPort);
+  //     }, { once: true });
 
-      if (autoPlay) {
-        video.play().catch(err => {
-          console.warn('Playback notice:', err);
-          if (stage) {
-            stage.classList.remove('is-playing');
-            stage.classList.add('is-paused');
-          }
-        });
-      }
-    }
+  //     if (autoPlay) {
+  //       video.play().catch(err => {
+  //         console.warn('Playback notice:', err);
+  //         if (stage) {
+  //           stage.classList.remove('is-playing');
+  //           stage.classList.add('is-paused');
+  //         }
+  //       });
+  //     }
+  //   }
 
-    items.forEach((item, index) => {
-      item.addEventListener('click', () => {
-        switchVideo(index, true);
-      });
-    });
+  //   items.forEach((item, index) => {
+  //     item.addEventListener('click', () => {
+  //       switchVideo(index, true);
+  //     });
+  //   });
 
-    if (video) {
-      // Khi video phát: ẩn nút Play, chuẩn bị nút Pause
-      video.addEventListener('play', () => {
-        if (stage) {
-          stage.classList.remove('is-paused');
-          stage.classList.add('is-playing');
-          showControlsBriefly();
-        }
-      });
+  //   if (video) {
+  //     // Khi video phát: ẩn nút Play, chuẩn bị nút Pause
+  //     video.addEventListener('play', () => {
+  //       if (stage) {
+  //         stage.classList.remove('is-paused');
+  //         stage.classList.add('is-playing');
+  //         showControlsBriefly();
+  //       }
+  //     });
 
-      // Khi video dừng: hiện nút Play nổi bật ở trung tâm
-      video.addEventListener('pause', () => {
-        if (stage) {
-          stage.classList.remove('is-playing', 'show-controls');
-          stage.classList.add('is-paused');
-        }
-      });
+  //     // Khi video dừng: hiện nút Play nổi bật ở trung tâm
+  //     video.addEventListener('pause', () => {
+  //       if (stage) {
+  //         stage.classList.remove('is-playing', 'show-controls');
+  //         stage.classList.add('is-paused');
+  //       }
+  //     });
 
-      // Khi video kết thúc, tự động chuyển tiếp sang video kế tiếp
-      video.addEventListener('ended', () => {
-        const nextIndex = (currentIndex + 1) % items.length;
-        switchVideo(nextIndex, true);
-      });
-    }
+  //     // Khi video kết thúc, tự động chuyển tiếp sang video kế tiếp
+  //     video.addEventListener('ended', () => {
+  //       const nextIndex = (currentIndex + 1) % items.length;
+  //       switchVideo(nextIndex, true);
+  //     });
+  //   }
 
-    // Thiết lập orientation & trạng thái ban đầu
-    const initialItem = items[currentIndex];
-    if (initialItem && stage) {
-      const initOrient = initialItem.dataset.orientation || 'landscape';
-      stage.classList.remove('is-portrait', 'is-landscape');
-      stage.classList.add(`is-${initOrient}`, 'is-paused');
-    }
+  //   // Thiết lập orientation & trạng thái ban đầu
+  //   const initialItem = items[currentIndex];
+  //   if (initialItem && stage) {
+  //     const initOrient = initialItem.dataset.orientation || 'landscape';
+  //     stage.classList.remove('is-portrait', 'is-landscape');
+  //     stage.classList.add(`is-${initOrient}`, 'is-paused');
+  //   }
 
-    // Tự động phát video khi cuộn vào tầm mắt, tạm dừng khi cuộn ra ngoài (tiết kiệm GPU & CPU)
-    if ('IntersectionObserver' in window) {
-      const videoCardObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            // Tạm dừng tất cả spotlight video khác để đảm bảo hiệu năng
-            document.querySelectorAll('.spotlight-video-wrapper video').forEach(otherVid => {
-              if (!otherVid.paused) otherVid.pause();
-            });
-            if (video && video.paused) {
-              video.muted = true;
-              video.play().catch(() => {});
-            }
-          } else {
-            if (video && !video.paused) {
-              video.pause();
-            }
-          }
-        });
-      }, { threshold: 0.3 });
-      videoCardObserver.observe(card);
-    }
-  }
+  //   // Tự động phát video khi cuộn vào tầm mắt, tạm dừng khi cuộn ra ngoài (tiết kiệm GPU & CPU)
+  //   if ('IntersectionObserver' in window) {
+  //     const videoCardObserver = new IntersectionObserver((entries) => {
+  //       entries.forEach(entry => {
+  //         if (entry.isIntersecting) {
+  //           // Tạm dừng tất cả spotlight video khác để đảm bảo hiệu năng
+  //           document.querySelectorAll('.spotlight-video-wrapper video').forEach(otherVid => {
+  //             if (!otherVid.paused) otherVid.pause();
+  //           });
+  //           if (video && video.paused) {
+  //             video.muted = true;
+  //             video.play().catch(() => { });
+  //           }
+  //         } else {
+  //           if (video && !video.paused) {
+  //             video.pause();
+  //           }
+  //         }
+  //       });
+  //     }, { threshold: 0.3 });
+  //     videoCardObserver.observe(card);
+  //   }
+  // }
 
   // Khởi chạy Video Playlist Portfolio
   initVideoPlaylist();
@@ -670,7 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
       video.addEventListener('pause', () => wrap.classList.remove('is-playing'));
       video.addEventListener('ended', () => {
         video.currentTime = 0;
-        video.play().catch(() => {});
+        video.play().catch(() => { });
       });
 
       // Tương tác chạm phát/dừng video thủ công khi người dùng muốn
@@ -687,7 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             }
           });
-          video.play().catch(() => {});
+          video.play().catch(() => { });
         } else {
           video.pause();
         }
@@ -719,7 +719,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).catch(() => {
                   // Dự phòng nếu trình duyệt yêu cầu mute chặt chẽ
                   video.muted = true;
-                  video.play().catch(() => {});
+                  video.play().catch(() => { });
                 });
               }
             } else {
@@ -733,7 +733,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         obs.observe(wrap);
       } else {
-        video.play().catch(() => {});
+        video.play().catch(() => { });
       }
     });
   }
@@ -760,7 +760,7 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(fbSection);
   }
 
-    initFeedbackBanner();
+  initFeedbackBanner();
 
   // ==========================================================================
   // 16. SKILLS SECTION COUNTER ANIMATION
@@ -783,277 +783,277 @@ document.addEventListener('DOMContentLoaded', () => {
   // Tự động trôi mượt mà (marquee), đồng thời hỗ trợ CHẠM VUỐT TRÁI/PHẢI 1:1 trên Mobile
   // Hiệu ứng Đỉnh Tam Giác 3D Xoay Vòng cập nhật thời gian thực khi vuốt.
   // ==========================================================================
-  function initTriangularBrandConveyor() {
-    const container = document.querySelector('.brand-conveyor-container');
-    if (!container) return;
+  // function initTriangularBrandConveyor() {
+  //   const container = document.querySelector('.brand-conveyor-container');
+  //   if (!container) return;
 
-    const track = container.querySelector('.conveyor-track');
-    const cards = container.querySelectorAll('.brand-item-card');
-    if (!track || !cards.length) return;
+  //   const track = container.querySelector('.conveyor-track');
+  //   const cards = container.querySelectorAll('.brand-item-card');
+  //   if (!track || !cards.length) return;
 
-    // Tắt CSS animation để JS điều khiển vị trí trực tiếp, hỗ trợ vuốt mượt mà 60fps
-    track.style.animation = 'none';
+  //   // Tắt CSS animation để JS điều khiển vị trí trực tiếp, hỗ trợ vuốt mượt mà 60fps
+  //   track.style.animation = 'none';
 
-    let isVisible = false;
-    let rafId = null;
-    let currentX = 0;
-    let lastTimestamp = performance.now();
+  //   let isVisible = false;
+  //   let rafId = null;
+  //   let currentX = 0;
+  //   let lastTimestamp = performance.now();
 
-    // Tốc độ trôi tự động: ~48px/s trên mobile, ~38px/s trên desktop (hướng sang trái)
-    const getBaseSpeed = () => (window.innerWidth <= 600 ? -48 : -38);
-    let autoSpeed = getBaseSpeed();
-    let inertiaSpeed = 0; // Trớn lướt sau khi buông tay
+  //   // Tốc độ trôi tự động: ~48px/s trên mobile, ~38px/s trên desktop (hướng sang trái)
+  //   const getBaseSpeed = () => (window.innerWidth <= 600 ? -48 : -38);
+  //   let autoSpeed = getBaseSpeed();
+  //   let inertiaSpeed = 0; // Trớn lướt sau khi buông tay
 
-    // Trạng thái Touch / Drag
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
-    let dragStartX = 0;
-    let lastTouchX = 0;
-    let lastTouchTime = 0;
-    let dragDirection = null; // 'horizontal' | 'vertical' | null
-    let isHovered = false;
+  //   // Trạng thái Touch / Drag
+  //   let isDragging = false;
+  //   let startX = 0;
+  //   let startY = 0;
+  //   let dragStartX = 0;
+  //   let lastTouchX = 0;
+  //   let lastTouchTime = 0;
+  //   let dragDirection = null; // 'horizontal' | 'vertical' | null
+  //   let isHovered = false;
 
-    // Hover trên desktop thì tạm dừng trôi tự động
-    container.addEventListener('mouseenter', () => { isHovered = true; });
-    container.addEventListener('mouseleave', () => { isHovered = false; });
+  //   // Hover trên desktop thì tạm dừng trôi tự động
+  //   container.addEventListener('mouseenter', () => { isHovered = true; });
+  //   container.addEventListener('mouseleave', () => { isHovered = false; });
 
-    // Touch handlers trên Mobile
-    const onTouchStart = (e) => {
-      const touch = e.touches ? e.touches[0] : e;
-      isDragging = true;
-      dragDirection = null;
-      startX = touch.clientX;
-      startY = touch.clientY;
-      dragStartX = currentX;
-      lastTouchX = touch.clientX;
-      lastTouchTime = performance.now();
-      inertiaSpeed = 0;
-      container.classList.add('is-dragging');
-    };
+  //   // Touch handlers trên Mobile
+  //   const onTouchStart = (e) => {
+  //     const touch = e.touches ? e.touches[0] : e;
+  //     isDragging = true;
+  //     dragDirection = null;
+  //     startX = touch.clientX;
+  //     startY = touch.clientY;
+  //     dragStartX = currentX;
+  //     lastTouchX = touch.clientX;
+  //     lastTouchTime = performance.now();
+  //     inertiaSpeed = 0;
+  //     container.classList.add('is-dragging');
+  //   };
 
-    const onTouchMove = (e) => {
-      if (!isDragging) return;
-      const touch = e.touches ? e.touches[0] : e;
-      const dx = touch.clientX - startX;
-      const dy = touch.clientY - startY;
+  //   const onTouchMove = (e) => {
+  //     if (!isDragging) return;
+  //     const touch = e.touches ? e.touches[0] : e;
+  //     const dx = touch.clientX - startX;
+  //     const dy = touch.clientY - startY;
 
-      // Nhận diện hướng vuốt sớm (sau 6px di chuyển)
-      if (dragDirection === null) {
-        if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
-          if (Math.abs(dx) >= Math.abs(dy)) {
-            dragDirection = 'horizontal';
-          } else {
-            // Khách đang cuộn dọc trang web -> hủy drag để trang cuộn tự nhiên
-            dragDirection = 'vertical';
-            isDragging = false;
-            container.classList.remove('is-dragging');
-            return;
-          }
-        } else {
-          return;
-        }
-      }
+  //     // Nhận diện hướng vuốt sớm (sau 6px di chuyển)
+  //     if (dragDirection === null) {
+  //       if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
+  //         if (Math.abs(dx) >= Math.abs(dy)) {
+  //           dragDirection = 'horizontal';
+  //         } else {
+  //           // Khách đang cuộn dọc trang web -> hủy drag để trang cuộn tự nhiên
+  //           dragDirection = 'vertical';
+  //           isDragging = false;
+  //           container.classList.remove('is-dragging');
+  //           return;
+  //         }
+  //       } else {
+  //         return;
+  //       }
+  //     }
 
-      if (dragDirection === 'horizontal') {
-        // Khách đang vuốt ngang băng chuyền -> chặn cuộn dọc trang để trải nghiệm vuốt trơn tru
-        if (e.cancelable) e.preventDefault();
+  //     if (dragDirection === 'horizontal') {
+  //       // Khách đang vuốt ngang băng chuyền -> chặn cuộn dọc trang để trải nghiệm vuốt trơn tru
+  //       if (e.cancelable) e.preventDefault();
 
-        currentX = dragStartX + dx;
+  //       currentX = dragStartX + dx;
 
-        const now = performance.now();
-        const dt = now - lastTouchTime;
-        if (dt > 8) {
-          inertiaSpeed = ((touch.clientX - lastTouchX) / dt) * 1000; // px/giây
-          lastTouchX = touch.clientX;
-          lastTouchTime = now;
-        }
-      }
-    };
+  //       const now = performance.now();
+  //       const dt = now - lastTouchTime;
+  //       if (dt > 8) {
+  //         inertiaSpeed = ((touch.clientX - lastTouchX) / dt) * 1000; // px/giây
+  //         lastTouchX = touch.clientX;
+  //         lastTouchTime = now;
+  //       }
+  //     }
+  //   };
 
-    const onTouchEnd = () => {
-      if (!isDragging && dragDirection !== 'horizontal') return;
-      isDragging = false;
-      dragDirection = null;
-      container.classList.remove('is-dragging');
+  //   const onTouchEnd = () => {
+  //     if (!isDragging && dragDirection !== 'horizontal') return;
+  //     isDragging = false;
+  //     dragDirection = null;
+  //     container.classList.remove('is-dragging');
 
-      // Giới hạn vận tốc trớn tối đa
-      const maxInertia = 1600;
-      if (inertiaSpeed > maxInertia) inertiaSpeed = maxInertia;
-      if (inertiaSpeed < -maxInertia) inertiaSpeed = -maxInertia;
-    };
+  //     // Giới hạn vận tốc trớn tối đa
+  //     const maxInertia = 1600;
+  //     if (inertiaSpeed > maxInertia) inertiaSpeed = maxInertia;
+  //     if (inertiaSpeed < -maxInertia) inertiaSpeed = -maxInertia;
+  //   };
 
-    // Đăng ký Touch listeners
-    container.addEventListener('touchstart', onTouchStart, { passive: true });
-    container.addEventListener('touchmove', onTouchMove, { passive: false });
-    container.addEventListener('touchend', onTouchEnd, { passive: true });
-    container.addEventListener('touchcancel', onTouchEnd, { passive: true });
+  //   // Đăng ký Touch listeners
+  //   container.addEventListener('touchstart', onTouchStart, { passive: true });
+  //   container.addEventListener('touchmove', onTouchMove, { passive: false });
+  //   container.addEventListener('touchend', onTouchEnd, { passive: true });
+  //   container.addEventListener('touchcancel', onTouchEnd, { passive: true });
 
-    // Hỗ trợ chuột kéo thả trên Desktop (Mouse drag)
-    container.addEventListener('mousedown', (e) => {
-      if (e.button !== 0) return;
-      onTouchStart(e);
-      const onMouseMove = (ev) => onTouchMove(ev);
-      const onMouseUp = () => {
-        onTouchEnd();
-        window.removeEventListener('mousemove', onMouseMove);
-        window.removeEventListener('mouseup', onMouseUp);
-      };
-      window.addEventListener('mousemove', onMouseMove);
-      window.addEventListener('mouseup', onMouseUp);
-    });
+  //   // Hỗ trợ chuột kéo thả trên Desktop (Mouse drag)
+  //   container.addEventListener('mousedown', (e) => {
+  //     if (e.button !== 0) return;
+  //     onTouchStart(e);
+  //     const onMouseMove = (ev) => onTouchMove(ev);
+  //     const onMouseUp = () => {
+  //       onTouchEnd();
+  //       window.removeEventListener('mousemove', onMouseMove);
+  //       window.removeEventListener('mouseup', onMouseUp);
+  //     };
+  //     window.addEventListener('mousemove', onMouseMove);
+  //     window.addEventListener('mouseup', onMouseUp);
+  //   });
 
-    // Tối ưu hiệu năng 60fps tuyệt đối: Cache kích thước & vị trí gốc của các card
-    // Loại bỏ hoàn toàn getBoundingClientRect() bên trong vòng lặp 60fps (chống giật lag & crash Safari/Messenger)
-    let containerWidth = container.offsetWidth || window.innerWidth;
-    let halfWidth = track.scrollWidth ? track.scrollWidth / 2 : 2400;
-    let isMobile = window.innerWidth <= 600;
-    let cardCenters = [];
+  //   // Tối ưu hiệu năng 60fps tuyệt đối: Cache kích thước & vị trí gốc của các card
+  //   // Loại bỏ hoàn toàn getBoundingClientRect() bên trong vòng lặp 60fps (chống giật lag & crash Safari/Messenger)
+  //   let containerWidth = container.offsetWidth || window.innerWidth;
+  //   let halfWidth = track.scrollWidth ? track.scrollWidth / 2 : 2400;
+  //   let isMobile = window.innerWidth <= 600;
+  //   let cardCenters = [];
 
-    function measureLayout() {
-      containerWidth = container.offsetWidth || window.innerWidth;
-      halfWidth = track.scrollWidth ? track.scrollWidth / 2 : 2400;
-      isMobile = window.innerWidth <= 600;
-      cardCenters = [];
-      for (let i = 0; i < cards.length; i++) {
-        cardCenters.push(cards[i].offsetLeft + cards[i].offsetWidth / 2);
-      }
-    }
+  //   function measureLayout() {
+  //     containerWidth = container.offsetWidth || window.innerWidth;
+  //     halfWidth = track.scrollWidth ? track.scrollWidth / 2 : 2400;
+  //     isMobile = window.innerWidth <= 600;
+  //     cardCenters = [];
+  //     for (let i = 0; i < cards.length; i++) {
+  //       cardCenters.push(cards[i].offsetLeft + cards[i].offsetWidth / 2);
+  //     }
+  //   }
 
-    // Đo đạc một lần duy nhất khi khởi tạo & khi xoay màn hình/resize
-    measureLayout();
-    window.addEventListener('resize', measureLayout, { passive: true });
+  //   // Đo đạc một lần duy nhất khi khởi tạo & khi xoay màn hình/resize
+  //   measureLayout();
+  //   window.addEventListener('resize', measureLayout, { passive: true });
 
-    // Chỉ chạy loop khi section nằm trong viewport (tiết kiệm CPU/GPU)
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          isVisible = entry.isIntersecting;
-          if (isVisible) {
-            if (cardCenters.length === 0 || cardCenters[0] === 0) measureLayout();
-            lastTimestamp = performance.now();
-            if (!rafId) rafId = requestAnimationFrame(updateLoop);
-          } else {
-            if (rafId) {
-              cancelAnimationFrame(rafId);
-              rafId = null;
-            }
-          }
-        });
-      }, { threshold: 0.05, rootMargin: '120px 0px' });
+  //   // Chỉ chạy loop khi section nằm trong viewport (tiết kiệm CPU/GPU)
+  //   if ('IntersectionObserver' in window) {
+  //     const observer = new IntersectionObserver((entries) => {
+  //       entries.forEach(entry => {
+  //         isVisible = entry.isIntersecting;
+  //         if (isVisible) {
+  //           if (cardCenters.length === 0 || cardCenters[0] === 0) measureLayout();
+  //           lastTimestamp = performance.now();
+  //           if (!rafId) rafId = requestAnimationFrame(updateLoop);
+  //         } else {
+  //           if (rafId) {
+  //             cancelAnimationFrame(rafId);
+  //             rafId = null;
+  //           }
+  //         }
+  //       });
+  //     }, { threshold: 0.05, rootMargin: '120px 0px' });
 
-      observer.observe(container);
-    } else {
-      isVisible = true;
-      rafId = requestAnimationFrame(updateLoop);
-    }
+  //     observer.observe(container);
+  //   } else {
+  //     isVisible = true;
+  //     rafId = requestAnimationFrame(updateLoop);
+  //   }
 
-    function updateLoop(now) {
-      if (!isVisible) {
-        rafId = null;
-        return;
-      }
+  //   function updateLoop(now) {
+  //     if (!isVisible) {
+  //       rafId = null;
+  //       return;
+  //     }
 
-      const dt = Math.min((now - lastTimestamp) / 1000, 0.1);
-      lastTimestamp = now;
+  //     const dt = Math.min((now - lastTimestamp) / 1000, 0.1);
+  //     lastTimestamp = now;
 
-      if (!isDragging) {
-        if (Math.abs(inertiaSpeed) > 15) {
-          // Trớn lướt mượt mà sau khi thả tay
-          currentX += inertiaSpeed * dt;
-          inertiaSpeed *= Math.pow(0.06, dt);
-        } else {
-          inertiaSpeed = 0;
-          if (!isHovered) {
-            autoSpeed = getBaseSpeed();
-            currentX += autoSpeed * dt;
-          }
-        }
-      }
+  //     if (!isDragging) {
+  //       if (Math.abs(inertiaSpeed) > 15) {
+  //         // Trớn lướt mượt mà sau khi thả tay
+  //         currentX += inertiaSpeed * dt;
+  //         inertiaSpeed *= Math.pow(0.06, dt);
+  //       } else {
+  //         inertiaSpeed = 0;
+  //         if (!isHovered) {
+  //           autoSpeed = getBaseSpeed();
+  //           currentX += autoSpeed * dt;
+  //         }
+  //       }
+  //     }
 
-      // Xoay vòng vô tận (Infinite wrap-around) cả 2 chiều trái & phải - Modulo an toàn 100%
-      if (halfWidth > 0) {
-        currentX = currentX % halfWidth;
-        if (currentX > 0) currentX -= halfWidth;
-      }
+  //     // Xoay vòng vô tận (Infinite wrap-around) cả 2 chiều trái & phải - Modulo an toàn 100%
+  //     if (halfWidth > 0) {
+  //       currentX = currentX % halfWidth;
+  //       if (currentX > 0) currentX -= halfWidth;
+  //     }
 
-      // Cập nhật vị trí băng chuyền
-      track.style.transform = `translate3d(${currentX.toFixed(2)}px, 0, 0)`;
+  //     // Cập nhật vị trí băng chuyền
+  //     track.style.transform = `translate3d(${currentX.toFixed(2)}px, 0, 0)`;
 
-      // Tính toán hiệu ứng Đỉnh Tam Giác cho các thẻ đang nằm trong tầm mắt (Chuẩn 2D mượt 60fps, 0% crash)
-      updateSpotlight();
+  //     // Tính toán hiệu ứng Đỉnh Tam Giác cho các thẻ đang nằm trong tầm mắt (Chuẩn 2D mượt 60fps, 0% crash)
+  //     updateSpotlight();
 
-      rafId = requestAnimationFrame(updateLoop);
-    }
+  //     rafId = requestAnimationFrame(updateLoop);
+  //   }
 
-    function updateSpotlight() {
-      const centerX = containerWidth / 2;
-      const maxDist = Math.max(containerWidth * (isMobile ? 0.46 : 0.42), 160);
+  //   function updateSpotlight() {
+  //     const centerX = containerWidth / 2;
+  //     const maxDist = Math.max(containerWidth * (isMobile ? 0.46 : 0.42), 160);
 
-      const minScale = isMobile ? 0.82 : 0.85;
-      const maxScale = isMobile ? 1.25 : 1.35;
-      const scaleDelta = maxScale - minScale;
-      const apexLift = isMobile ? -14 : -20;
+  //     const minScale = isMobile ? 0.82 : 0.85;
+  //     const maxScale = isMobile ? 1.25 : 1.35;
+  //     const scaleDelta = maxScale - minScale;
+  //     const apexLift = isMobile ? -14 : -20;
 
-      for (let i = 0; i < cards.length; i++) {
-        const card = cards[i];
-        const cardCenter = cardCenters[i] || (i * 140);
-        const cardCenterX = currentX + cardCenter;
+  //     for (let i = 0; i < cards.length; i++) {
+  //       const card = cards[i];
+  //       const cardCenter = cardCenters[i] || (i * 140);
+  //       const cardCenterX = currentX + cardCenter;
 
-        // Bỏ qua các card nằm ngoài màn hình để tối ưu 60fps tuyệt đối
-        if (cardCenterX < -100 || cardCenterX > containerWidth + 100) {
-          if (card._activeSpotlight) {
-            card.style.transform = '';
-            card.style.opacity = '';
-            card.style.zIndex = '';
-            card.classList.remove('is-spotlight-peak');
-            card._activeSpotlight = false;
-          }
-          continue;
-        }
+  //       // Bỏ qua các card nằm ngoài màn hình để tối ưu 60fps tuyệt đối
+  //       if (cardCenterX < -100 || cardCenterX > containerWidth + 100) {
+  //         if (card._activeSpotlight) {
+  //           card.style.transform = '';
+  //           card.style.opacity = '';
+  //           card.style.zIndex = '';
+  //           card.classList.remove('is-spotlight-peak');
+  //           card._activeSpotlight = false;
+  //         }
+  //         continue;
+  //       }
 
-        const signedDist = cardCenterX - centerX;
-        const dist = Math.abs(signedDist);
+  //       const signedDist = cardCenterX - centerX;
+  //       const dist = Math.abs(signedDist);
 
-        if (dist < maxDist) {
-          // Hàm cosinus tạo đường cong tam giác dốc rõ rệt
-          const norm = dist / maxDist;
-          const peak = Math.cos(norm * (Math.PI / 2));
-          const peakCurve = Math.pow(peak, 1.35);
+  //       if (dist < maxDist) {
+  //         // Hàm cosinus tạo đường cong tam giác dốc rõ rệt
+  //         const norm = dist / maxDist;
+  //         const peak = Math.cos(norm * (Math.PI / 2));
+  //         const peakCurve = Math.pow(peak, 1.35);
 
-          const scale = minScale + scaleDelta * peakCurve;
-          const translateY = apexLift * peakCurve;
-          const opacity = 0.65 + 0.35 * peak;
-          const zIndex = Math.round(2 + peakCurve * 20);
+  //         const scale = minScale + scaleDelta * peakCurve;
+  //         const translateY = apexLift * peakCurve;
+  //         const opacity = 0.65 + 0.35 * peak;
+  //         const zIndex = Math.round(2 + peakCurve * 20);
 
-          // 2D Transform nhẹ nhàng và ổn định tuyệt đối (không perspective/3D Metal crash)
-          card.style.transform = `translateY(${translateY.toFixed(1)}px) scale(${scale.toFixed(3)})`;
-          card.style.opacity = opacity.toFixed(2);
-          card.style.zIndex = zIndex.toString();
+  //         // 2D Transform nhẹ nhàng và ổn định tuyệt đối (không perspective/3D Metal crash)
+  //         card.style.transform = `translateY(${translateY.toFixed(1)}px) scale(${scale.toFixed(3)})`;
+  //         card.style.opacity = opacity.toFixed(2);
+  //         card.style.zIndex = zIndex.toString();
 
-          if (peakCurve > 0.58) {
-            if (!card.classList.contains('is-spotlight-peak')) {
-              card.classList.add('is-spotlight-peak');
-            }
-          } else {
-            if (card.classList.contains('is-spotlight-peak')) {
-              card.classList.remove('is-spotlight-peak');
-            }
-          }
+  //         if (peakCurve > 0.58) {
+  //           if (!card.classList.contains('is-spotlight-peak')) {
+  //             card.classList.add('is-spotlight-peak');
+  //           }
+  //         } else {
+  //           if (card.classList.contains('is-spotlight-peak')) {
+  //             card.classList.remove('is-spotlight-peak');
+  //           }
+  //         }
 
-          card._activeSpotlight = true;
-        } else {
-          if (card._activeSpotlight) {
-            card.style.transform = `scale(${minScale})`;
-            card.style.opacity = '0.55';
-            card.style.zIndex = '1';
-            card.classList.remove('is-spotlight-peak');
-            card._activeSpotlight = false;
-          }
-        }
-      }
-    }
-  }
+  //         card._activeSpotlight = true;
+  //       } else {
+  //         if (card._activeSpotlight) {
+  //           card.style.transform = `scale(${minScale})`;
+  //           card.style.opacity = '0.55';
+  //           card.style.zIndex = '1';
+  //           card.classList.remove('is-spotlight-peak');
+  //           card._activeSpotlight = false;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   initTriangularBrandConveyor();
 
