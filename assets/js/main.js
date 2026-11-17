@@ -1,51 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 0. Grand Stage Curtain Reveal (Chỉ kích hoạt trên Desktop màn hình rộng - Tắt trên Mobile để vào tức thì, chống trắng màn hình)
+  // 0. Grand Stage Curtain Reveal (Tấm màn kéo sân khấu khai màn khi vào web)
   const stageCurtain = document.getElementById('stageCurtain');
-  const isMobile = window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
   if (stageCurtain) {
-    if (isMobile) {
-      stageCurtain.remove();
+    document.body.classList.add('curtain-locked');
+
+    let curtainOpened = false;
+    const openCurtain = () => {
+      if (curtainOpened) return;
+      curtainOpened = true;
+
+      stageCurtain.classList.add('curtain-open');
       document.body.classList.remove('curtain-locked');
       document.body.classList.add('curtain-revealed');
+
+      // Kích hoạt hiệu ứng Fade-in Hero khi cái cửa/rèm mở ra
       const heroSection = document.getElementById('hero');
-      if (heroSection) heroSection.classList.add('hero-in-view');
-      initQuoteReveal();
-    } else {
-      document.body.classList.add('curtain-locked');
-      let curtainOpened = false;
-      const openCurtain = () => {
-        if (curtainOpened) return;
-        curtainOpened = true;
+      if (heroSection) {
+        heroSection.classList.add('hero-in-view');
+      }
 
-        stageCurtain.classList.add('curtain-open');
-        document.body.classList.remove('curtain-locked');
-        document.body.classList.add('curtain-revealed');
+      // Kích hoạt Fade-in cho Quote lời ngỏ MC khi mở cửa (nếu thấy) hoặc khi cuộn tới
+      setTimeout(() => {
+        initQuoteReveal();
+      }, 550);
 
-        const heroSection = document.getElementById('hero');
-        if (heroSection) {
-          heroSection.classList.add('hero-in-view');
-        }
+      // Sau khi rèm mở hoàn tất (1.6s), ẩn hoàn toàn
+      setTimeout(() => {
+        stageCurtain.classList.add('curtain-hidden');
+      }, 1650);
+    };
 
-        setTimeout(() => {
-          initQuoteReveal();
-        }, 550);
+    // Tự động mở sau 850ms để người xem chiêm ngưỡng màn khai mạc
+    const autoOpenTimer = setTimeout(openCurtain, 850);
 
-        setTimeout(() => {
-          stageCurtain.classList.add('curtain-hidden');
-        }, 1650);
-      };
-
-      const autoOpenTimer = setTimeout(openCurtain, 850);
-
-      stageCurtain.addEventListener('click', () => {
-        clearTimeout(autoOpenTimer);
-        openCurtain();
-      });
-    }
-  } else {
-    document.body.classList.remove('curtain-locked');
-    document.body.classList.add('curtain-revealed');
+    // Người dùng chạm hoặc click bất cứ đâu -> Mở màn ngay lập tức
+    stageCurtain.addEventListener('click', () => {
+      clearTimeout(autoOpenTimer);
+      openCurtain();
+    });
   }
 
   // 0.1 Ensure Header is removed from DOM (if cached)

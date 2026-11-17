@@ -8859,21 +8859,5 @@ body.curtain-revealed #hero .hero-sparkles-wrap,
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
-
-  .stage-curtain-overlay {
-    display: none !important;
-    pointer-events: none !important;
-  }
-
-  body.curtain-locked {
-    overflow: auto !important;
-  }
-
-  body.curtain-locked #hero .hero-text-col,
-  body.curtain-locked #hero .hero-cutout-img,
-  body.curtain-locked #hero .hero-cutout-backdrop {
-    opacity: 1 !important;
-    transform: none !important;
-  }
 }
 
