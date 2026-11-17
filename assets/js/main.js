@@ -586,15 +586,26 @@ document.addEventListener('DOMContentLoaded', () => {
       stage.classList.add(`is-${initOrient}`, 'is-paused');
     }
 
-    // Tự động tạm dừng video khi cuộn ra ngoài màn hình (tiết kiệm GPU & CPU)
+    // Tự động phát video khi cuộn vào tầm mắt, tạm dừng khi cuộn ra ngoài (tiết kiệm GPU & CPU)
     if ('IntersectionObserver' in window) {
       const videoCardObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          if (!entry.isIntersecting && video && !video.paused) {
-            video.pause();
+          if (entry.isIntersecting) {
+            // Tạm dừng tất cả spotlight video khác để đảm bảo hiệu năng
+            document.querySelectorAll('.spotlight-video-wrapper video').forEach(otherVid => {
+              if (!otherVid.paused) otherVid.pause();
+            });
+            if (video && video.paused) {
+              video.muted = true;
+              video.play().catch(() => {});
+            }
+          } else {
+            if (video && !video.paused) {
+              video.pause();
+            }
           }
         });
-      }, { threshold: 0.1 });
+      }, { threshold: 0.3 });
       videoCardObserver.observe(card);
     }
   }
@@ -659,14 +670,14 @@ document.addEventListener('DOMContentLoaded', () => {
       video.addEventListener('pause', () => wrap.classList.remove('is-playing'));
       video.addEventListener('ended', () => {
         video.currentTime = 0;
-        wrap.classList.remove('is-playing');
+        video.play().catch(() => {});
       });
 
-      // Tương tác chạm phát/dừng video (Tap to play) - KHÔNG tự động play khi cuộn để chống sập RAM Messenger/iPhone
+      // Tương tác chạm phát/dừng video thủ công khi người dùng muốn
       const toggleVideo = (e) => {
         if (e.target.closest('.spotlight-sound-toggle')) return;
         if (video.paused) {
-          // Tạm dừng TẤT CẢ các video khác để không bao giờ chạy 2 video song song
+          // Tạm dừng TẤT CẢ các video khác để đảm bảo duy nhất 1 video chạy trong GPU
           wrappers.forEach(otherWrap => {
             if (otherWrap !== wrap) {
               const otherVid = otherWrap.querySelector('video');
@@ -684,18 +695,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
       wrap.addEventListener('click', toggleVideo);
 
-      // Khi video đang phát mà người dùng cuộn ra xa khỏi màn hình -> tự động dừng để tiết kiệm pin & RAM
+      // IntersectionObserver: Tự động phát khi cuộn vào tầm mắt, tự động dừng khi cuộn ra ngoài
       if ('IntersectionObserver' in window) {
         const obs = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
-            if (!entry.isIntersecting && !video.paused) {
-              video.pause();
-              wrap.classList.remove('is-playing');
+            if (entry.isIntersecting) {
+              // Tạm dừng TẤT CẢ các video khác trong trang
+              wrappers.forEach(otherWrap => {
+                if (otherWrap !== wrap) {
+                  const otherVid = otherWrap.querySelector('video');
+                  if (otherVid && !otherVid.paused) {
+                    otherVid.pause();
+                    otherWrap.classList.remove('is-playing');
+                  }
+                }
+              });
+
+              video.muted = true;
+              const playPromise = video.play();
+              if (playPromise !== undefined) {
+                playPromise.then(() => {
+                  wrap.classList.add('is-playing');
+                }).catch(() => {
+                  // Dự phòng nếu trình duyệt yêu cầu mute chặt chẽ
+                  video.muted = true;
+                  video.play().catch(() => {});
+                });
+              }
+            } else {
+              if (!video.paused) {
+                video.pause();
+                wrap.classList.remove('is-playing');
+              }
             }
           });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.25 });
 
         obs.observe(wrap);
+      } else {
+        video.play().catch(() => {});
       }
     });
   }
